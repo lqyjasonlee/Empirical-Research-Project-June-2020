@@ -1,0 +1,3529 @@
+------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/Qiyuan/Desktop/ERP/data/erp_result_new.txt
+  log type:  text
+ opened on:   7 Jul 2020, 17:41:19
+
+. use ERP_data_qiyuan.dta ;
+(Uniform Crime Reporting Program Data [United States]: Arrests by Age, S
+> ex, and R)
+
+. * Normalized trend variable ;
+. gen trend = (year - 1980)/12 ;
+
+. tsset statenum year ;
+       panel variable:  statenum (unbalanced)
+        time variable:  year, 0 to 1999, but with gaps
+                delta:  1 unit
+
+. * Estimate baseline model in first-differences ;
+. xi: reg D.lpc_viol D.irca D.lpop D.UR D.povrate D.ATWI D.crack_index D
+> .la14pc D.opc D.logincome D.logemp i.year , cluster(statenum) ;
+i.year            _Iyear_0-1999       (naturally coded; _Iyear_0 omitted
+> )
+note: _Iyear_1980 omitted because of collinearity
+note: _Iyear_1984 omitted because of collinearity
+
+Linear regression                               Number of obs     =     
+> 41,664
+                                                F(28, 2686)       =     
+>  11.55
+                                                Prob > F          =     
+> 0.0000
+                                                R-squared         =     
+> 0.0055
+                                                Root MSE          =     
+> .69812
+
+                           (Std. Err. adjusted for 2,687 clusters in sta
+> tenum)
+------------------------------------------------------------------------
+> ------
+             |               Robust
+  D.lpc_viol |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Int
+> erval]
+-------------+----------------------------------------------------------
+> ------
+        irca |
+         D1. |  -2.654868   1.319713    -2.01   0.044    -5.242625   -.0
+> 671115
+             |
+        lpop |
+         D1. |   -.362892   .1777847    -2.04   0.041    -.7115007   -.0
+> 142833
+             |
+          UR |
+         D1. |  -.0082721   .0035918    -2.30   0.021    -.0153151    -.
+> 001229
+             |
+     povrate |
+         D1. |  -.0139352   .0061623    -2.26   0.024    -.0260185    -.
+> 001852
+             |
+        ATWI |
+         D1. |   1.505623   3.894571     0.39   0.699    -6.131038    9.
+> 142283
+             |
+ crack_index |
+         D1. |    .006402   .0099474     0.64   0.520    -.0131034    .0
+> 259075
+             |
+      la14pc |
+         D1. |   7.316699    5.47789     1.34   0.182    -3.424609    18
+> .05801
+             |
+         opc |
+         D1. |   19.21277   8.769903     2.19   0.029     2.016324    36
+> .40921
+             |
+   logincome |
+         D1. |   .2953575   .0927584     3.18   0.001     .1134723    .4
+> 772426
+             |
+      logemp |
+         D1. |   .2253845   .1118854     2.01   0.044     .0059943    .4
+> 447746
+             |
+ _Iyear_1980 |          0  (omitted)
+ _Iyear_1981 |   .0815228   .0243853     3.34   0.001     .0337069    .1
+> 293387
+ _Iyear_1982 |   .0155777   .0252316     0.62   0.537    -.0338976    .0
+> 650529
+ _Iyear_1983 |   .0505073   .0279564     1.81   0.071    -.0043111    .1
+> 053256
+ _Iyear_1984 |          0  (omitted)
+ _Iyear_1985 |   .0667849   .0250203     2.67   0.008     .0177238    .1
+> 158459
+ _Iyear_1986 |   .0380659   .0219492     1.73   0.083    -.0049732     .
+> 081105
+ _Iyear_1987 |   .0058834   .0258193     0.23   0.820    -.0447443    .0
+> 565111
+ _Iyear_1988 |   .0601702   .0215625     2.79   0.005     .0178894     .
+> 102451
+ _Iyear_1989 |   .1034711   .0214186     4.83   0.000     .0614724    .1
+> 454698
+ _Iyear_1990 |    .153043   .0239811     6.38   0.000     .1060197    .2
+> 000664
+ _Iyear_1991 |   .0126841   .0272734     0.47   0.642     -.040795    .0
+> 661631
+ _Iyear_1992 |   .0573892   .0227007     2.53   0.012     .0128765    .1
+> 019018
+ _Iyear_1993 |   .0739205   .0227312     3.25   0.001     .0293481    .1
+> 184928
+ _Iyear_1994 |    .052008   .0220426     2.36   0.018     .0087858    .0
+> 952302
+ _Iyear_1995 |   .0729682   .0229072     3.19   0.001     .0280506    .1
+> 178857
+ _Iyear_1996 |  -.0000897   .0230673    -0.00   0.997    -.0453212    .0
+> 451418
+ _Iyear_1997 |   .0254971   .0221951     1.15   0.251    -.0180241    .0
+> 690182
+ _Iyear_1998 |   .0341334   .0226458     1.51   0.132    -.0102715    .0
+> 785383
+ _Iyear_1999 |  -.0584709   .0237525    -2.46   0.014    -.1050458    -.
+> 011896
+       _cons |  -.0185516   .0181006    -1.02   0.305    -.0540441    .0
+> 169409
+------------------------------------------------------------------------
+> ------
+
+. xi: reg D.lpc_prop D.irca D.lpop D.UR D.povrate D.ATWI D.crack_index D
+> .la14pc D.opc D.logincome D.logemp i.year , cluster(statenum) ;
+i.year            _Iyear_0-1999       (naturally coded; _Iyear_0 omitted
+> )
+note: _Iyear_1980 omitted because of collinearity
+note: _Iyear_1984 omitted because of collinearity
+
+Linear regression                               Number of obs     =     
+> 41,664
+                                                F(28, 2686)       =     
+>  12.10
+                                                Prob > F          =     
+> 0.0000
+                                                R-squared         =     
+> 0.0064
+                                                Root MSE          =     
+> .66329
+
+                           (Std. Err. adjusted for 2,687 clusters in sta
+> tenum)
+------------------------------------------------------------------------
+> ------
+             |               Robust
+  D.lpc_prop |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Int
+> erval]
+-------------+----------------------------------------------------------
+> ------
+        irca |
+         D1. |   -2.46476   1.269506    -1.94   0.052    -4.954068     .
+> 024549
+             |
+        lpop |
+         D1. |   .0963873   .1641036     0.59   0.557    -.2253949    .4
+> 181695
+             |
+          UR |
+         D1. |  -.0026532   .0036343    -0.73   0.465    -.0097795    .0
+> 044732
+             |
+     povrate |
+         D1. |  -.0109688   .0055159    -1.99   0.047    -.0217845    -.
+> 000153
+             |
+        ATWI |
+         D1. |   1.179805   3.358199     0.35   0.725    -5.405111    7.
+> 764721
+             |
+ crack_index |
+         D1. |    .006036    .010271     0.59   0.557    -.0141037    .0
+> 261758
+             |
+      la14pc |
+         D1. |   6.205492   4.720413     1.31   0.189    -3.050518     1
+> 5.4615
+             |
+         opc |
+         D1. |   11.50684   6.589151     1.75   0.081    -1.413482    24
+> .42716
+             |
+   logincome |
+         D1. |   .1242655   .0800886     1.55   0.121    -.0327761    .2
+> 813071
+             |
+      logemp |
+         D1. |   .0583507    .100906     0.58   0.563    -.1395106     .
+> 256212
+             |
+ _Iyear_1980 |          0  (omitted)
+ _Iyear_1981 |   .1356943   .0229453     5.91   0.000      .090702    .1
+> 806865
+ _Iyear_1982 |  -.0157132   .0241687    -0.65   0.516    -.0631044    .0
+> 316779
+ _Iyear_1983 |   .0600041   .0270315     2.22   0.027     .0069995    .1
+> 130088
+ _Iyear_1984 |          0  (omitted)
+ _Iyear_1985 |   .1149883   .0228314     5.04   0.000     .0702194    .1
+> 597571
+ _Iyear_1986 |   .0214369   .0211466     1.01   0.311    -.0200284    .0
+> 629021
+ _Iyear_1987 |   .0588452   .0236704     2.49   0.013     .0124311    .1
+> 052593
+ _Iyear_1988 |   .0478225   .0197439     2.42   0.015     .0091078    .0
+> 865372
+ _Iyear_1989 |   .1001987   .0194465     5.15   0.000     .0620671    .1
+> 383303
+ _Iyear_1990 |   .1068223   .0230497     4.63   0.000     .0616254    .1
+> 520193
+ _Iyear_1991 |   .0459596   .0249888     1.84   0.066    -.0030396    .0
+> 949588
+ _Iyear_1992 |   .0233698   .0214833     1.09   0.277    -.0187556    .0
+> 654953
+ _Iyear_1993 |  -.0059301   .0218233    -0.27   0.786    -.0487222     .
+> 036862
+ _Iyear_1994 |   .0594307   .0211695     2.81   0.005     .0179205    .1
+> 009409
+ _Iyear_1995 |    .081269   .0213687     3.80   0.000     .0393683    .1
+> 231696
+ _Iyear_1996 |   .0456684   .0218207     2.09   0.036     .0028813    .0
+> 884554
+ _Iyear_1997 |   .0116756   .0212575     0.55   0.583    -.0300072    .0
+> 533583
+ _Iyear_1998 |   .0010636    .021763     0.05   0.961    -.0416103    .0
+> 437375
+ _Iyear_1999 |  -.0751167   .0242316    -3.10   0.002    -.1226312   -.0
+> 276022
+       _cons |  -.0576132   .0169169    -3.41   0.001    -.0907845   -.0
+> 244418
+------------------------------------------------------------------------
+> ------
+
+. xi: reg D.lpc_all D.irca D.lpop D.UR D.povrate D.ATWI D.crack_index D.
+> la14pc D.opc D.logincome D.logemp i.year , cluster(statenum) ;
+i.year            _Iyear_0-1999       (naturally coded; _Iyear_0 omitted
+> )
+note: _Iyear_1980 omitted because of collinearity
+note: _Iyear_1984 omitted because of collinearity
+
+Linear regression                               Number of obs     =     
+> 41,664
+                                                F(28, 2686)       =     
+>  11.95
+                                                Prob > F          =     
+> 0.0000
+                                                R-squared         =     
+> 0.0066
+                                                Root MSE          =     
+> .53304
+
+                           (Std. Err. adjusted for 2,687 clusters in sta
+> tenum)
+------------------------------------------------------------------------
+> ------
+             |               Robust
+   D.lpc_all |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Int
+> erval]
+-------------+----------------------------------------------------------
+> ------
+        irca |
+         D1. |  -3.254109   1.002863    -3.24   0.001    -5.220571   -1.
+> 287647
+             |
+        lpop |
+         D1. |  -.2761602   .1194478    -2.31   0.021    -.5103791   -.0
+> 419414
+             |
+          UR |
+         D1. |  -.0041546   .0029421    -1.41   0.158    -.0099236    .0
+> 016144
+             |
+     povrate |
+         D1. |  -.0089857   .0043502    -2.07   0.039    -.0175157   -.0
+> 004557
+             |
+        ATWI |
+         D1. |  -2.358878   4.465726    -0.53   0.597    -11.11549     6
+> .39773
+             |
+ crack_index |
+         D1. |   .0002985   .0091619     0.03   0.974    -.0176667    .0
+> 182636
+             |
+      la14pc |
+         D1. |   8.588361   3.796457     2.26   0.024     1.144088    16
+> .03263
+             |
+         opc |
+         D1. |   15.55288    6.01698     2.58   0.010     3.754497    27
+> .35126
+             |
+   logincome |
+         D1. |   .1338403   .0588345     2.27   0.023     .0184748    .2
+> 492058
+             |
+      logemp |
+         D1. |   .2747666   .0762696     3.60   0.000     .1252136    .4
+> 243196
+             |
+ _Iyear_1980 |          0  (omitted)
+ _Iyear_1981 |   .1423409   .0187289     7.60   0.000     .1056165    .1
+> 790653
+ _Iyear_1982 |   .0445795   .0193608     2.30   0.021     .0066159    .0
+> 825431
+ _Iyear_1983 |   .0763778   .0207059     3.69   0.000     .0357766     .
+> 116979
+ _Iyear_1984 |          0  (omitted)
+ _Iyear_1985 |   .0670436   .0175746     3.81   0.000     .0325824    .1
+> 015048
+ _Iyear_1986 |   .0340369   .0163304     2.08   0.037     .0020154    .0
+> 660583
+ _Iyear_1987 |   .0437988   .0181969     2.41   0.016     .0081176    .0
+> 794801
+ _Iyear_1988 |   .0637098   .0157685     4.04   0.000     .0327902    .0
+> 946294
+ _Iyear_1989 |   .0863018   .0153344     5.63   0.000     .0562334    .1
+> 163702
+ _Iyear_1990 |   .1362693   .0179619     7.59   0.000     .1010488    .1
+> 714897
+ _Iyear_1991 |   .0295372   .0197146     1.50   0.134    -.0091201    .0
+> 681944
+ _Iyear_1992 |   .0342954   .0170974     2.01   0.045       .00077    .0
+> 678209
+ _Iyear_1993 |   .0062447   .0176041     0.35   0.723    -.0282743    .0
+> 407636
+ _Iyear_1994 |     .04886   .0164369     2.97   0.003     .0166298    .0
+> 810903
+ _Iyear_1995 |   .0650868   .0171597     3.79   0.000     .0314392    .0
+> 987343
+ _Iyear_1996 |   .0781126   .0173548     4.50   0.000     .0440825    .1
+> 121427
+ _Iyear_1997 |   .0396296   .0160575     2.47   0.014     .0081432     .
+> 071116
+ _Iyear_1998 |   .0668925   .0171047     3.91   0.000     .0333528    .1
+> 004323
+ _Iyear_1999 |  -.0235916   .0195676    -1.21   0.228    -.0619607    .0
+> 147775
+       _cons |  -.0567751    .012969    -4.38   0.000    -.0822053    -.
+> 031345
+------------------------------------------------------------------------
+> ------
+
+. * Generate variables for LASSO ;
+. local tdums = "_Iyear_1982 _Iyear_1983 _Iyear_1984 _Iyear_1985 _Iyear_
+> 1986 _Iyear_1987 _Iyear_1988 _Iyear_1989 _Iyear_1990 _Iyear_1991 _Iyea
+> r_1992 _Iyear_1993 _Iyear_1994 _Iyear_1995 _Iyear_1996 _Iyear_1997 _Iy
+> ear_1998 _Iyear_1999" ;
+
+. local xx = "lpop UR povrate ATWI crack_index la14pc opc logincome loge
+> mp" ;
+
+. * Differences ;
+. local Dxx ;
+
+. foreach x of local xx { ;
+  2.         gen D`x' = D.`x' ;
+  3.         local tempname = "D`x'" ;
+  4.         local Dxx : list Dxx | tempname ;
+  5. } ;
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+
+. * Squared Differences
+> local Dxx2 ;
+. foreach x of local Dxx { ;
+  2.         gen `x'2 = `x'^2 ;
+  3.         local tempname = "`x'2" ;
+  4.         local Dxx2 : list Dxx2 | tempname ;
+  5. } ;
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+
+. * Difference Interactions
+> local DxxInt ;
+. local nxx : word count `Dxx' ;
+
+. forvalues ii = 1/`nxx' { ;
+  2.         local start = `ii'+1 ;
+  3.         forvalues jj = `start'/`nxx' { ;
+  4.                 local temp1 : word `ii' of `Dxx' ;
+  5.                 local temp2 : word `jj' of `Dxx' ;
+  6.                 gen `temp1'X`temp2' = `temp1'*`temp2' ;
+  7.                 local tempname = "`temp1'X`temp2'" ;
+  8.                 local DxxInt : list DxxInt | tempname ;
+  9.         } ;
+ 10. } ;
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+
+.                 * Lags ;
+. local Lxx ;
+
+. foreach x of local xx { ;
+  2.         gen L`x' = L.`x' ;
+  3.         local tempname = "L`x'" ;
+  4.         local Lxx : list Lxx | tempname ;
+  5. } ;
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+
+. * Squared Lags
+> local Lxx2 ;
+. foreach x of local Lxx { ;
+  2.         gen `x'2 = `x'^2 ;
+  3.         local tempname = "`x'2" ;
+  4.         local Lxx2 : list Lxx2 | tempname ;
+  5. } ;
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+
+. * Means ;
+. local Mxx ;
+
+. foreach x of local xx { ;
+  2.         by statenum: egen M`x' = mean(`x') ;
+  3.         local tempname = "M`x'" ;
+  4.         local Mxx : list Mxx | tempname ;
+  5. } ;
+
+. * Squared Means ;
+. local Mxx2 ;
+
+. foreach x of local Mxx { ;
+  2.         gen `x'2 = `x'^2 ;
+  3.         local tempname = "`x'2" ;
+  4.         local Mxx2 : list Mxx2 | tempname ;
+  5. } ;
+
+. * Initial Levels ;
+. local xx0 ;
+
+. foreach x of local xx { ;
+  2.         by statenum: gen `x'0 = `x'[1] ;
+  3.         local tempname = "`x'0" ;
+  4.         local xx0 : list xx0 | tempname ;
+  5. } ;
+
+. * Squared Initial Levels ;
+. local xx02 ;
+
+. foreach x of local xx0 { ;
+  2.         gen `x'2 = `x'^2 ;
+  3.         local tempname = "`x'2" ;
+  4.         local xx02 : list xx02 | tempname ;
+  5. } ;
+
+. * Initial Differences ;
+. local Dxx0 ;
+
+. foreach x of local Dxx { ;
+  2.         by statenum: gen `x'0 = `x'[2] ;
+  3.         local tempname = "`x'0" ;
+  4.         local xx0 : list xx0 | tempname ;
+  5. } ;
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+
+. * Squared Initial Differences ;
+. local Dxx02 ;
+
+. foreach x of local Dxx0 { ;
+  2.         gen `x'2 = `x'^2 ;
+  3.         local tempname = "`x'2" ;
+  4.         local Dxx02 : list Dxx02 | tempname ;
+  5. } ;
+
+. * Interactions with trends ;
+. local biglist : list Dxx | Dxx2 ;
+
+. local biglist : list biglist | DxxInt ;
+
+. local biglist : list biglist | Lxx ;
+
+. local biglist : list biglist | Lxx2 ;
+
+. local biglist : list biglist | Mxx ;
+
+. local biglist : list biglist | Mxx2 ;
+
+. local biglist : list biglist | xx0 ;
+
+. local biglist : list biglist | xx02 ;
+
+. local biglist : list biglist | Dxx0 ;
+
+. local biglist : list biglist | Dxx02 ;
+
+. local IntT ;
+
+. local nxx : word count `biglist' ;
+
+. foreach x of local biglist { ;
+  2.         gen `x'Xt = `x'*trend ;
+  3.         gen `x'Xt2 = `x'*(trend^2) ;
+  4.         local tempname = "`x'Xt `x'Xt2" ;
+  5.         local IntT : list IntT | tempname ;
+  6. } ;
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(6,024 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+(42,165 missing values generated)
+
+.         local shared : list biglist | IntT ;
+
+. * Violence specific controls ;
+. gen Dirca = D.irca ;
+(6,024 missing values generated)
+
+. by statenum: gen viol0 = irca[1] ;
+
+. by statenum: gen Dviol0 = Dirca[2] ;
+(42,165 missing values generated)
+
+. gen viol02 = viol0^2 ;
+
+. gen Dviol02 = Dviol0^2 ;
+(42,165 missing values generated)
+
+. gen viol0Xt = viol0*trend ;
+
+. gen viol0Xt2 = viol0*(trend^2) ;
+
+. gen viol02Xt = viol02*trend ;
+
+. gen viol02Xt2 = viol02*(trend^2) ;
+
+. gen Dviol0Xt = Dviol0*trend ;
+(42,165 missing values generated)
+
+. gen Dviol0Xt2 = Dviol0*(trend^2) ;
+(42,165 missing values generated)
+
+. gen Dviol02Xt = Dviol02*trend ;
+(42,165 missing values generated)
+
+. gen Dviol02Xt2 = Dviol02*(trend^2) ;
+(42,165 missing values generated)
+
+. local contviol = "viol0 viol0Xt viol0Xt2 viol02 viol02Xt viol02Xt2 
+>                         Dviol0 Dviol0Xt Dviol0Xt2 Dviol02 Dviol02Xt Dv
+> iol02Xt2" ;
+
+. local AllViol : list contviol | shared ;
+
+.                         * Property specifc controls ;
+. * gen Dprop = D.efaprop ;
+. by statenum: gen prop0 = irca[1] ;
+
+. by statenum: gen Dprop0 = Dirca[2] ;
+(42,165 missing values generated)
+
+. gen prop02 = prop0^2 ;
+
+. gen Dprop02 = Dprop0^2 ;
+(42,165 missing values generated)
+
+. gen prop0Xt = prop0*trend ;
+
+. gen prop0Xt2 = prop0*(trend^2) ;
+
+. gen prop02Xt = prop02*trend ;
+
+. gen prop02Xt2 = prop02*(trend^2) ;
+
+. gen Dprop0Xt = Dprop0*trend ;
+(42,165 missing values generated)
+
+. gen Dprop0Xt2 = Dprop0*(trend^2) ;
+(42,165 missing values generated)
+
+. gen Dprop02Xt = Dprop02*trend ;
+(42,165 missing values generated)
+
+. gen Dprop02Xt2 = Dprop02*(trend^2) ;
+(42,165 missing values generated)
+
+. local contprop = "prop0 prop0Xt prop0Xt2 prop02 prop02Xt prop02Xt2 
+>                         Dprop0 Dprop0Xt Dprop0Xt2 Dprop02 Dprop02Xt Dp
+> rop02Xt2" ;
+
+.                         local AllProp : list contprop | shared ;
+
+. * All crime specific controls ;
+. gen Dall = D.irca ;
+(6,024 missing values generated)
+
+. by statenum: gen all0 = irca[1] ;
+
+. by statenum: gen Dall0 = Dall[2] ;
+(42,165 missing values generated)
+
+. gen all02 = all0^2 ;
+
+. gen Dall02 = Dall0^2 ;
+(42,165 missing values generated)
+
+. gen all0Xt = all0*trend ;
+
+. gen all0Xt2 = all0*(trend^2) ;
+
+. gen all02Xt = all02*trend ;
+
+. gen all02Xt2 = all02*(trend^2) ;
+
+. gen Dall0Xt = Dall0*trend ;
+(42,165 missing values generated)
+
+. gen Dall0Xt2 = Dall0*(trend^2) ;
+(42,165 missing values generated)
+
+. gen Dall02Xt = Dall02*trend ;
+(42,165 missing values generated)
+
+. gen Dall02Xt2 = Dall02*(trend^2) ;
+(42,165 missing values generated)
+
+. local contall = "all0 all0Xt all0Xt2 all02 all02Xt all02Xt2 
+>                         Dall0 Dall0Xt Dall0Xt2 Dall02 Dall02Xt Dall02X
+> t2" ;
+
+.                         local AllAll : list contall | shared ;
+
+. * Differenced outcomes ;
+. gen Dyviol = D.lpc_viol ;
+(6,024 missing values generated)
+
+. gen Dyprop = D.lpc_prop ;
+(6,024 missing values generated)
+
+. gen Dyall = D.lpc_all ;
+(6,024 missing values generated)
+
+.                         drop if trend == 0 ;
+(2,240 observations deleted)
+
+. * Regression using naive method ;
+. reg Dyviol irca `AllViol' `tdums' , cluster(statenum) ;
+note: viol0 omitted because of collinearity
+note: viol0Xt omitted because of collinearity
+note: viol0Xt2 omitted because of collinearity
+note: viol02 omitted because of collinearity
+note: viol02Xt omitted because of collinearity
+note: viol02Xt2 omitted because of collinearity
+note: Dviol0 omitted because of collinearity
+note: Dviol0Xt omitted because of collinearity
+note: Dviol0Xt2 omitted because of collinearity
+note: Dviol02 omitted because of collinearity
+note: Dviol02Xt omitted because of collinearity
+note: Dviol02Xt2 omitted because of collinearity
+note: DpovrateXt omitted because of collinearity
+note: DpovrateXt2 omitted because of collinearity
+note: Dpovrate2Xt omitted because of collinearity
+note: Dpovrate2Xt2 omitted because of collinearity
+note: DlpopXDpovrateXt omitted because of collinearity
+note: DlpopXDpovrateXt2 omitted because of collinearity
+note: DURXDpovrateXt omitted because of collinearity
+note: DURXDpovrateXt2 omitted because of collinearity
+note: DpovrateXDATWIXt omitted because of collinearity
+note: DpovrateXDATWIXt2 omitted because of collinearity
+note: DpovrateXDcrack_indexXt omitted because of collinearity
+note: DpovrateXDcrack_indexXt2 omitted because of collinearity
+note: DpovrateXDla14pcXt omitted because of collinearity
+note: DpovrateXDla14pcXt2 omitted because of collinearity
+note: DpovrateXDopcXt omitted because of collinearity
+note: DpovrateXDopcXt2 omitted because of collinearity
+note: DpovrateXDlogincomeXt omitted because of collinearity
+note: DpovrateXDlogincomeXt2 omitted because of collinearity
+note: DpovrateXDlogempXt omitted because of collinearity
+note: DpovrateXDlogempXt2 omitted because of collinearity
+
+Linear regression                               Number of obs     =     
+>  4,806
+                                                F(260, 442)       =     
+>      .
+                                                Prob > F          =     
+>      .
+                                                R-squared         =     
+> 0.1039
+                                                Root MSE          =     
+> .80586
+
+                             (Std. Err. adjusted for 443 clusters in sta
+> tenum)
+------------------------------------------------------------------------
+> ------
+             |               Robust
+      Dyviol |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Int
+> erval]
+-------------+----------------------------------------------------------
+> ------
+        irca |  -2.711791   23.98308    -0.11   0.910    -49.84684    44
+> .42326
+       viol0 |          0  (omitted)
+     viol0Xt |          0  (omitted)
+    viol0Xt2 |          0  (omitted)
+      viol02 |          0  (omitted)
+    viol02Xt |          0  (omitted)
+   viol02Xt2 |          0  (omitted)
+      Dviol0 |          0  (omitted)
+    Dviol0Xt |          0  (omitted)
+   Dviol0Xt2 |          0  (omitted)
+     Dviol02 |          0  (omitted)
+   Dviol02Xt |          0  (omitted)
+  Dviol02Xt2 |          0  (omitted)
+       Dlpop |   5.144577   5.590161     0.92   0.358    -5.842022    16
+> .13118
+         DUR |   .2153634   .1273425     1.69   0.092    -.0349085    .4
+> 656354
+    Dpovrate |  -.0915224   .0472442    -1.94   0.053    -.1843736    .0
+> 013287
+       DATWI |  -505.4495    1006.15    -0.50   0.616    -2482.881    14
+> 71.982
+Dcrack_index |   .3372971   .6204762     0.54   0.587    -.8821531    1.
+> 556747
+     Dla14pc |  -1080.686   1344.284    -0.80   0.422     -3722.67    15
+> 61.297
+        Dopc |   228.5725   247.2348     0.92   0.356    -257.3293    71
+> 4.4743
+  Dlogincome |   .5390683   1.993221     0.27   0.787    -3.378299    4.
+> 456436
+     Dlogemp |  -5.392574   2.771304    -1.95   0.052    -10.83914    .0
+> 539958
+      Dlpop2 |  -9.689981   70.34023    -0.14   0.890    -147.9328    12
+> 8.5529
+        DUR2 |  -.0367877   .0249389    -1.48   0.141    -.0858013     .
+> 012226
+   Dpovrate2 |  -.0066201   .0040312    -1.64   0.101    -.0145428    .0
+> 013027
+      DATWI2 |   -1082493   524952.9    -2.06   0.040     -2114207   -50
+> 779.38
+Dcrack_in~x2 |   .1563331   .3786439     0.41   0.680     -.587833    .9
+> 004991
+    Dla14pc2 |    1118623    1212756     0.92   0.357     -1264861     3
+> 502107
+       Dopc2 |   35095.59   26013.57     1.35   0.178    -16030.06    86
+> 221.24
+ Dlogincome2 |  -.9234952   4.037655    -0.23   0.819    -8.858884    7.
+> 011893
+    Dlogemp2 |  -.8228761   29.99478    -0.03   0.978    -59.77298    58
+> .12723
+   DlpopXDUR |  -5.490998   2.316817    -2.37   0.018    -10.04434   -.9
+> 376518
+DlpopXDpov~e |  -1.181202   1.085574    -1.09   0.277     -3.31473    .9
+> 523261
+ DlpopXDATWI |  -14726.97   18199.93    -0.81   0.419    -50496.12    21
+> 042.19
+DlpopXDcra~x |   4.588211   9.636438     0.48   0.634    -14.35072    23
+> .52714
+DlpopXDla1~c |  -7924.705   32373.38    -0.24   0.807    -71549.58    55
+> 700.17
+  DlpopXDopc |  -10674.35   5300.429    -2.01   0.045    -21091.52   -25
+> 7.1708
+DlpopXDlog~e |   18.72485   36.60318     0.51   0.609    -53.21304    90
+> .66275
+DlpopXDlog~p |  -51.29912   69.35999    -0.74   0.460    -187.6155    85
+> .01723
+DURXDpovrate |   .0252029   .0144145     1.75   0.081    -.0031265    .0
+> 535324
+   DURXDATWI |  -1558.781     386.19    -4.04   0.000    -2317.778   -79
+> 9.7845
+DURXDcrack~x |   .5002557   .1853407     2.70   0.007     .1359972    .8
+> 645143
+ DURXDla14pc |   -2035.47   527.6897    -3.86   0.000    -3072.563   -99
+> 8.3777
+    DURXDopc |  -52.71229   110.8092    -0.48   0.635    -270.4908    16
+> 5.0662
+DURXDlogin~e |   -1.26452   .8143661    -1.55   0.121    -2.865031    .3
+> 359909
+ DURXDlogemp |   2.521324   1.388214     1.82   0.070    -.2069952    5.
+> 249644
+DpovrateXD~I |  -155.5695   333.6081    -0.47   0.641    -811.2247    50
+> 0.0856
+DpovrateXD~x |   .1959723   .0770113     2.54   0.011     .0446186    .3
+> 473261
+Dpovrate~4pc |  -26.94192   48.93435    -0.55   0.582    -123.1148      
+> 69.231
+Dpovrate~opc |  -127.4625   40.43234    -3.15   0.002     -206.926     -
+> 47.999
+DpovrateXD~e |  -.5316469   .4023732    -1.32   0.187    -1.322449    .2
+> 591555
+DpovrateXD~p |   .7543163   .3767103     2.00   0.046     .0139503    1.
+> 494682
+DATWIXDcra~x |   1479.262   1192.153     1.24   0.215    -863.7306    38
+> 22.255
+DATWIXDla1~c |   -4825900    5297926    -0.91   0.363    -1.52e+07     5
+> 586356
+  DATWIXDopc |  -551137.6   545550.7    -1.01   0.313     -1623333      
+> 521058
+DATWIXDlog~e |  -5820.395   7062.797    -0.82   0.410    -19701.23    80
+> 60.443
+DATWIXDlog~p |  -1951.168   13360.05    -0.15   0.884    -28208.29    24
+> 305.95
+Dcrack_i~4pc |   873.0731    1242.92     0.70   0.483    -1569.695    33
+> 15.841
+Dcrack_i~opc |  -307.4396   731.2495    -0.42   0.674    -1744.598    11
+> 29.718
+Dcrack_ind~e |   1.617489   5.233188     0.31   0.757    -8.667534    11
+> .90251
+Dcrack_ind~p |   -10.7898    7.13914    -1.51   0.131    -24.82067    3.
+> 241081
+Dla14pcXDopc |  -596778.4    1097630    -0.54   0.587     -2754000     1
+> 560443
+Dla14pcXDl~e |   -7345.06   11803.05    -0.62   0.534    -30542.14    15
+> 852.02
+Dla14pcXDl~p |  -20493.32   14582.35    -1.41   0.161    -49152.69     8
+> 166.04
+DopcXDlogi~e |  -2185.915   1776.772    -1.23   0.219    -5677.886    13
+> 06.056
+DopcXDlogemp |    -4337.8   3876.357    -1.12   0.264    -11956.18    32
+> 80.581
+Dlogincome~p |   15.42836   20.75784     0.74   0.458    -25.36796    56
+> .22468
+       Llpop |   .8791709   12.81541     0.07   0.945    -24.30753    26
+> .06587
+         LUR |   1.051189   .2683633     3.92   0.000     .5237622    1.
+> 578616
+    Lpovrate |   .7207129   1.553071     0.46   0.643    -2.331609    3.
+> 773035
+       LATWI |  -704.8003   545.5799    -1.29   0.197    -1777.053    36
+> 7.4528
+Lcrack_index |   .5272647   .3496485     1.51   0.132    -.1599154    1.
+> 214445
+     Lla14pc |   1206.477   900.1791     1.34   0.181    -562.6859     2
+> 975.64
+        Lopc |   187.7254   127.5696     1.47   0.142    -62.99292    43
+> 8.4437
+  Llogincome |   -43.9034   21.03055    -2.09   0.037    -85.23571   -2.
+> 571091
+     Llogemp |  -4.083531   7.423452    -0.55   0.583    -18.67318    10
+> .50612
+      Llpop2 |  -.1046081   .6329758    -0.17   0.869    -1.348624    1.
+> 139408
+        LUR2 |  -.0537575   .0158819    -3.38   0.001    -.0849709    -.
+> 022544
+   Lpovrate2 |  -.0521405   .0402406    -1.30   0.196    -.1312272    .0
+> 269463
+      LATWI2 |   8271.442    7776.42     1.06   0.288     -7011.91    23
+> 554.79
+Lcrack_in~x2 |   .0942369   .1940321     0.49   0.627    -.2871033    .4
+> 755771
+    Lla14pc2 |  -158820.4   85640.74    -1.85   0.064    -327134.1    94
+> 93.265
+       Lopc2 |  -9919.512   5362.716    -1.85   0.065     -20459.1    62
+> 0.0788
+ Llogincome2 |   2.331621    1.17794     1.98   0.048      .016561    4.
+> 646681
+    Llogemp2 |   .2279758   .4055029     0.56   0.574    -.5689774    1.
+> 024929
+       Mlpop |  -10.90309   5.243036    -2.08   0.038    -21.20747    -.
+> 598712
+         MUR |  -.9227845   .2927782    -3.15   0.002    -1.498195   -.3
+> 473741
+    Mpovrate |   .0615392   .1300355     0.47   0.636    -.1940255     .
+> 317104
+       MATWI |   415.2995   331.9685     1.25   0.212    -237.1334    10
+> 67.732
+Mcrack_index |   .5077218   .4557793     1.11   0.266     -.388042    1.
+> 403486
+     Mla14pc |  -442.7027    220.468    -2.01   0.045    -875.9984   -9.
+> 406985
+        Mopc |   134.5765   145.5144     0.92   0.356    -151.4095    42
+> 0.5625
+  Mlogincome |    12.4243   14.61716     0.85   0.396    -16.30347    41
+> .15207
+     Mlogemp |   5.216301   3.562779     1.46   0.144    -1.785791    12
+> .21839
+      Mlpop2 |   .5164757   .2628382     1.96   0.050    -.0000921    1.
+> 033044
+        MUR2 |   .0601003   .0187628     3.20   0.001      .023225    .0
+> 969756
+   Mpovrate2 |  -.0017453   .0025596    -0.68   0.496    -.0067758    .0
+> 032853
+      MATWI2 |  -12844.67    7256.91    -1.77   0.077    -27107.01    14
+> 17.666
+Mcrack_in~x2 |   .0309531   .2314536     0.13   0.894    -.4239332    .4
+> 858395
+    Mla14pc2 |   71271.18   41253.38     1.73   0.085    -9805.966    15
+> 2348.3
+       Mopc2 |  -22235.22   12593.36    -1.77   0.078    -46985.53    25
+> 15.096
+ Mlogincome2 |  -.6494441   .7752876    -0.84   0.403    -2.173152    .8
+> 742639
+    Mlogemp2 |  -.2621275   .1790367    -1.46   0.144    -.6139965    .0
+> 897416
+       lpop0 |   13.21268   13.29459     0.99   0.321    -12.91578    39
+> .34115
+         UR0 |  -.7486579   .2637944    -2.84   0.005    -1.267105   -.2
+> 302107
+    povrate0 |  -.7721372   1.526833    -0.51   0.613    -3.772891    2.
+> 228617
+       ATWI0 |   329.5255   567.0928     0.58   0.561    -785.0079    14
+> 44.059
+crack_index0 |   .5033069   .4301005     1.17   0.243    -.3419892    1.
+> 348603
+     la14pc0 |  -9584.678   5984.118    -1.60   0.110    -21345.54    21
+> 76.182
+        opc0 |  -440.8091   195.4938    -2.25   0.025     -825.022    -5
+> 6.5962
+  logincome0 |   34.78548   24.71546     1.41   0.160    -13.78893     8
+> 3.3599
+     logemp0 |  -3.066644   6.415503    -0.48   0.633    -15.67532    9.
+> 542036
+      Dlpop0 |   3.416452    3.46012     0.99   0.324    -3.383879    10
+> .21678
+        DUR0 |     .03538   .0861743     0.41   0.682    -.1339822    .2
+> 047422
+   Dpovrate0 |  -3.140701   1.879963    -1.67   0.096    -6.835478    .5
+> 540768
+      DATWI0 |   1454.802    991.856     1.47   0.143    -494.5376    34
+> 04.142
+Dcrack_ind~0 |   .1181579    .308021     0.38   0.701    -.4872099    .7
+> 235257
+    Dla14pc0 |  -2837.429   1411.725    -2.01   0.045    -5611.956   -62
+> .90125
+       Dopc0 |  -56.95337   116.6502    -0.49   0.626    -286.2113    17
+> 2.3046
+ Dlogincome0 |   2.066635    1.11343     1.86   0.064    -.1216399     4
+> .25491
+    Dlogemp0 |  -.9231513   1.514563    -0.61   0.542    -3.899791    2.
+> 053488
+      lpop02 |  -.5839752   .6660714    -0.88   0.381    -1.893036    .7
+> 250852
+        UR02 |   .0412466   .0168436     2.45   0.015     .0081431    .0
+> 743502
+   povrate02 |    .053582    .039633     1.35   0.177    -.0243106    .1
+> 314746
+      ATWI02 |   2039.037   5588.295     0.36   0.715    -8943.895    13
+> 021.97
+crack_ind~02 |   .6768737    .550016     1.23   0.219    -.4040978    1.
+> 757845
+    la14pc02 |    3464815    2104051     1.65   0.100    -670372.5     7
+> 600002
+       opc02 |   53581.65    22027.7     2.43   0.015     10289.62    96
+> 873.69
+ logincome02 |  -1.831145    1.37966    -1.33   0.185    -4.542654    .8
+> 803637
+    logemp02 |   .1536602   .3558764     0.43   0.666    -.5457598    .8
+> 530802
+     DlpopXt |  -13.00489   18.43785    -0.71   0.481    -49.24164    23
+> .23186
+    DlpopXt2 |   5.761027   12.57678     0.46   0.647     -18.9567    30
+> .47875
+       DURXt |  -.6945889   .3568804    -1.95   0.052    -1.395982    .0
+> 068043
+      DURXt2 |   .4025121   .2161028     1.86   0.063    -.0222044    .8
+> 272287
+  DpovrateXt |          0  (omitted)
+ DpovrateXt2 |          0  (omitted)
+     DATWIXt |  -933.8584   4921.858    -0.19   0.850    -10607.01    87
+> 39.294
+    DATWIXt2 |    4129.89   4396.993     0.94   0.348    -4511.722     1
+> 2771.5
+Dcrack_i~xXt |   -.445238   1.635312    -0.27   0.786    -3.659191    2.
+> 768715
+Dcrack_~xXt2 |  -.0283662   .9153307    -0.03   0.975    -1.827307    1.
+> 770575
+   Dla14pcXt |   3071.685   3329.318     0.92   0.357    -3471.575    96
+> 14.946
+  Dla14pcXt2 |  -2091.374   1891.134    -1.11   0.269    -5808.107    16
+> 25.358
+      DopcXt |  -1255.619   836.6775    -1.50   0.134     -2899.98    38
+> 8.7413
+     DopcXt2 |   884.9196    553.972     1.60   0.111    -203.8269    19
+> 73.666
+DlogincomeXt |   1.128129   6.029503     0.19   0.852    -10.72193    12
+> .97819
+Dloginc~eXt2 |  -.3716414   3.929492    -0.09   0.925    -8.094451    7.
+> 351168
+   DlogempXt |   17.87135   8.579077     2.08   0.038     1.010502    34
+> .73221
+  DlogempXt2 |  -11.39996   5.690609    -2.00   0.046    -22.58398   -.2
+> 159493
+    Dlpop2Xt |   6.651754   286.9263     0.02   0.982    -557.2576    57
+> 0.5611
+   Dlpop2Xt2 |   57.01675   220.1336     0.26   0.796    -375.6219    48
+> 9.6554
+      DUR2Xt |   .1154825   .0659618     1.75   0.081    -.0141553    .2
+> 451203
+     DUR2Xt2 |  -.0777754   .0450972    -1.72   0.085    -.1664069    .0
+> 108562
+ Dpovrate2Xt |          0  (omitted)
+Dpovrate2Xt2 |          0  (omitted)
+    DATWI2Xt |    5912448    2507329     2.36   0.019     984681.1    1.
+> 08e+07
+   DATWI2Xt2 |   -4806736    2072114    -2.32   0.021     -8879156   -73
+> 4315.2
+Dcrack_i~2Xt |  -.1196558   1.072652    -0.11   0.911    -2.227788    1.
+> 988477
+Dcrack_~2Xt2 |    .036584   .6161987     0.06   0.953    -1.174459    1.
+> 247627
+  Dla14pc2Xt |   -3413588    3202824    -1.07   0.287     -9708245     2
+> 881068
+ Dla14pc2Xt2 |    2545861    1943462     1.31   0.191     -1273714     6
+> 365435
+     Dopc2Xt |  -165634.8   89113.01    -1.86   0.064    -340772.6    95
+> 03.092
+    Dopc2Xt2 |   131548.8   64453.46     2.04   0.042     4875.524    25
+> 8222.2
+Dloginco~2Xt |   1.391581   17.73866     0.08   0.938    -33.47102    36
+> .25418
+Dloginc~2Xt2 |  -1.659779   14.37878    -0.12   0.908    -29.91904    26
+> .59949
+  Dlogemp2Xt |  -17.02209   90.95472    -0.19   0.852    -195.7795    16
+> 1.7354
+ Dlogemp2Xt2 |  -6.781475   66.69282    -0.10   0.919    -137.8559     1
+> 24.293
+ DlpopXDURXt |   15.24171   8.128138     1.88   0.061    -.7328866    31
+> .21631
+DlpopXDURXt2 |  -8.538658   5.918008    -1.44   0.150    -20.16959    3.
+> 092273
+DlpopXDpov~t |          0  (omitted)
+DlpopXDpov~2 |          0  (omitted)
+DlpopXDATW~t |   91105.31   89393.53     1.02   0.309    -84583.88    26
+> 6794.5
+DlpopXDATW~2 |  -114214.9    87255.8    -1.31   0.191    -285702.7    57
+> 272.91
+DlpopXDcra~t |   .8844637   26.83344     0.03   0.974    -51.85252    53
+> .62145
+DlpopXDcra~2 |  -3.957182    17.1606    -0.23   0.818     -37.6837    29
+> .76934
+DlpopXDla1~t |   13182.59   83857.72     0.16   0.875    -151626.8      
+> 177992
+DlpopXDla1~2 |  -3040.516   50126.13    -0.06   0.952    -101555.7    95
+> 474.65
+DlpopXDopcXt |   34504.96    18990.9     1.82   0.070    -2818.709    71
+> 828.64
+DlpopXDopc~2 |  -16170.62   13949.75    -1.16   0.247     -43586.7    11
+> 245.46
+DlpopXDl~eXt |   7.123253   147.3384     0.05   0.961    -282.4476    29
+> 6.6941
+DlpopX~meXt2 |  -3.758202   114.2667    -0.03   0.974    -228.3318    22
+> 0.8154
+DlpopXDl~pXt |   236.6037   241.9931     0.98   0.329    -238.9963    71
+> 2.2037
+DlpopXD~pXt2 |   -194.339   179.1115    -1.09   0.279    -546.3549    15
+> 7.6769
+DURXDpovra~t |          0  (omitted)
+DURXDpovra~2 |          0  (omitted)
+ DURXDATWIXt |   6374.339   1532.968     4.16   0.000     3361.527     9
+> 387.15
+DURXDATWIXt2 |  -5072.616   1197.208    -4.24   0.000    -7425.543   -27
+> 19.689
+DURXDcrack~t |  -1.134876   .5224331    -2.17   0.030    -2.161638   -.1
+> 081148
+DURXDcrack~2 |   .5679335   .3112938     1.82   0.069    -.0438665    1.
+> 179733
+DURXDla14p~t |   4780.684   1301.391     3.67   0.000     2223.001    73
+> 38.368
+DURXDla14p~2 |  -2646.379   786.2761    -3.37   0.001    -4191.684   -11
+> 01.075
+  DURXDopcXt |   362.6389   440.9581     0.82   0.411    -503.9962    12
+> 29.274
+ DURXDopcXt2 |  -253.1228    280.431    -0.90   0.367    -804.2667    29
+> 8.0211
+DURXDlogin~t |   3.296208   2.745464     1.20   0.231    -2.099578    8.
+> 691994
+DURXDlogin~2 |  -1.772331   1.733911    -1.02   0.307    -5.180066    1.
+> 635403
+DURXDlogem~t |  -6.486681   5.179028    -1.25   0.211    -16.66526    3.
+> 691899
+DURXDlogem~2 |    2.21464   3.417329     0.65   0.517    -4.501593    8.
+> 930874
+Dpovrate~IXt |          0  (omitted)
+Dpovrat~IXt2 |          0  (omitted)
+Dpovrate~xXt |          0  (omitted)
+Dpovrat~xXt2 |          0  (omitted)
+Dpovra~4pcXt |          0  (omitted)
+Dpovr~4pcXt2 |          0  (omitted)
+Dpovra~opcXt |          0  (omitted)
+Dpovr~opcXt2 |          0  (omitted)
+Dpovrate~eXt |          0  (omitted)
+Dpovra~meXt2 |          0  (omitted)
+Dpovrate~pXt |          0  (omitted)
+Dpovrat~pXt2 |          0  (omitted)
+DATWIXDcra~t |   -2178.33    3812.13    -0.57   0.568    -9670.483    53
+> 13.823
+DATWIXDcra~2 |  -1765.028   3505.673    -0.50   0.615    -8654.888    51
+> 24.831
+DATWIXDla1~t |   1.77e+07   1.52e+07     1.17   0.244    -1.21e+07    4.
+> 76e+07
+DATWIXDla1~2 |  -1.53e+07   1.07e+07    -1.43   0.153    -3.62e+07     5
+> 687930
+DATWIXDopcXt |    3180578    3954584     0.80   0.422     -4591547    1.
+> 10e+07
+DATWIXDopc~2 |   -4567671    3507309    -1.30   0.193    -1.15e+07     2
+> 325403
+DATWIXDl~eXt |   70870.55   50938.23     1.39   0.165    -29240.68    17
+> 0981.8
+DATWIXD~eXt2 |  -71568.57   55583.01    -1.29   0.199    -180808.4    37
+> 671.26
+DATWIXDl~pXt |  -5755.277   64426.97    -0.09   0.929    -132376.5      
+> 120866
+DATWIXD~pXt2 |    15024.1   51637.87     0.29   0.771    -86462.16    11
+> 6510.4
+Dcrack~4pcXt |  -2223.923    3135.89    -0.71   0.479    -8387.032    39
+> 39.185
+Dcrac~4pcXt2 |   1149.337   1751.738     0.66   0.512    -2293.434    45
+> 92.108
+Dcrack~opcXt |   753.4378    2497.49     0.30   0.763    -4154.993    56
+> 61.868
+Dcrac~opcXt2 |  -495.0203   1857.511    -0.27   0.790    -4145.672    31
+> 55.631
+Dcrack_i~eXt |  -2.759952   15.02975    -0.18   0.854    -32.29861    26
+> .77871
+Dcrack_~eXt2 |   3.239777   9.333736     0.35   0.729    -15.10424    21
+> .58379
+Dcrack_i~pXt |   21.29274   19.10953     1.11   0.266    -16.26409    58
+> .84957
+Dcrack_~pXt2 |  -12.43887   11.76921    -1.06   0.291    -35.56944    10
+> .69169
+Dla14pcXDo~t |    2571846    2883472     0.89   0.373     -3095172     8
+> 238864
+Dla14pcXDo~2 |   -2034535    1786295    -1.14   0.255     -5545221     1
+> 476151
+Dla14pcX~eXt |   18204.85   28768.32     0.63   0.527    -38334.85    74
+> 744.55
+Dla14pc~eXt2 |  -12760.84   16354.31    -0.78   0.436    -44902.71    19
+> 381.04
+Dla14pcX~pXt |   47174.48   37374.36     1.26   0.208    -26279.06      
+> 120628
+Dla14pc~pXt2 |  -26461.39   22881.91    -1.16   0.248    -71432.25    18
+> 509.46
+DopcXDlogi~t |   17432.58   7212.273     2.42   0.016     3257.972    31
+> 607.19
+DopcXDlogi~2 |  -14250.82   5740.219    -2.48   0.013    -25532.33   -29
+> 69.307
+DopcXDloge~t |   8874.259   12749.54     0.70   0.487       -16183    33
+> 931.52
+DopcXDloge~2 |  -6412.331   9628.883    -0.67   0.506    -25336.41    12
+> 511.75
+Dloginco~pXt |  -67.18469   71.65695    -0.94   0.349    -208.0154    73
+> .64599
+Dloginc~pXt2 |   65.56618   54.13651     1.21   0.226    -40.83077    17
+> 1.9631
+     LlpopXt |  -38.73199   24.08955    -1.61   0.109    -86.07629    8.
+> 612305
+    LlpopXt2 |   30.27689   13.89035     2.18   0.030     2.977542    57
+> .57623
+       LURXt |  -2.195413    .725292    -3.03   0.003    -3.620862   -.7
+> 699633
+      LURXt2 |   1.009519   .4375811     2.31   0.022      .149521    1.
+> 869517
+  LpovrateXt |  -1.072254   2.587549    -0.41   0.679    -6.157682    4.
+> 013173
+ LpovrateXt2 |   .3807089   1.067942     0.36   0.722    -1.718167    2.
+> 479585
+     LATWIXt |   1858.909   904.2431     2.06   0.040     81.75856    36
+> 36.059
+    LATWIXt2 |  -1152.803   587.0037    -1.96   0.050    -2306.468    .8
+> 616315
+Lcrack_i~xXt |  -1.078055   1.162052    -0.93   0.354    -3.361889    1.
+> 205779
+Lcrack_~xXt2 |   .4321339   .7243612     0.60   0.551    -.9914862    1.
+> 855754
+   Lla14pcXt |  -2999.318   2021.168    -1.48   0.139    -6971.612    97
+> 2.9769
+  Lla14pcXt2 |   1683.772   1075.271     1.57   0.118    -429.5063    37
+> 97.051
+      LopcXt |  -465.0978   387.9468    -1.20   0.231    -1227.547    29
+> 7.3516
+     LopcXt2 |   172.4839   259.5504     0.66   0.507    -337.6223    68
+> 2.5901
+LlogincomeXt |    50.4434   31.92249     1.58   0.115    -12.29532    11
+> 3.1821
+Lloginc~eXt2 |  -37.77152   23.00975    -1.64   0.101    -82.99362    7.
+> 450589
+   LlogempXt |   29.40476   16.95141     1.73   0.084    -3.910624    62
+> .72014
+  LlogempXt2 |  -18.93043   9.884468    -1.92   0.056    -38.35683    .4
+> 959642
+    Llpop2Xt |   2.076655   1.181963     1.76   0.080    -.2463101    4.
+> 399621
+   Llpop2Xt2 |  -1.591028   .6876585    -2.31   0.021    -2.942515   -.2
+> 395413
+      LUR2Xt |   .1080778   .0453029     2.39   0.017     .0190419    .1
+> 971137
+     LUR2Xt2 |  -.0484875   .0272911    -1.78   0.076    -.1021238    .0
+> 051489
+ Lpovrate2Xt |   .0849843    .067318     1.26   0.207    -.0473189    .2
+> 172874
+Lpovrate2Xt2 |  -.0339018   .0278606    -1.22   0.224    -.0886575     .
+> 020854
+    LATWI2Xt |  -24828.05   10968.14    -2.26   0.024    -46384.24   -32
+> 71.859
+   LATWI2Xt2 |   15993.55     9693.7     1.65   0.100    -3057.922    35
+> 045.02
+Lcrack_i~2Xt |  -.0212264   .4745481    -0.04   0.964    -.9538774    .9
+> 114246
+Lcrack_~2Xt2 |  -.0815947   .2642305    -0.31   0.758     -.600899    .4
+> 377095
+  Lla14pc2Xt |   375653.6   192848.9     1.95   0.052     -3361.25    75
+> 4668.4
+ Lla14pc2Xt2 |  -201888.4   100730.6    -2.00   0.046    -399858.8   -39
+> 17.995
+     Lopc2Xt |   29231.41   19403.08     1.51   0.133    -8902.341    67
+> 365.16
+    Lopc2Xt2 |   -14059.4   14014.36    -1.00   0.316    -41602.46    13
+> 483.66
+Lloginco~2Xt |  -2.602974   1.755321    -1.48   0.139    -6.052786     .
+> 846838
+Lloginc~2Xt2 |   1.897437   1.160161     1.64   0.103    -.3826799    4.
+> 177555
+  Llogemp2Xt |  -1.653736   .8932432    -1.85   0.065    -3.409268    .1
+> 017952
+ Llogemp2Xt2 |   1.065413   .5051415     2.11   0.035     .0726354    2.
+> 058191
+     MlpopXt |   54.48842   27.12168     2.01   0.045     1.184946    10
+> 7.7919
+    MlpopXt2 |  -36.14696   23.05002    -1.57   0.118    -81.44822    9.
+> 154302
+       MURXt |   2.377292   .9843914     2.41   0.016     .4426226    4.
+> 311961
+      MURXt2 |  -1.411484   .7258782    -1.94   0.052    -2.838085    .0
+> 151176
+  MpovrateXt |  -.2821337   .4946371    -0.57   0.569    -1.254266    .6
+> 899991
+ MpovrateXt2 |   .2558586   .4049788     0.63   0.528    -.5400647    1.
+> 051782
+     MATWIXt |  -2022.617   1591.633    -1.27   0.204    -5150.726    11
+> 05.492
+    MATWIXt2 |   1589.767   1360.298     1.17   0.243    -1083.688    42
+> 63.221
+Mcrack_i~xXt |  -2.357069    1.58266    -1.49   0.137    -5.467542     .
+> 753404
+Mcrack_~xXt2 |   1.867477    1.09447     1.71   0.089    -.2835356    4.
+> 018489
+   Mla14pcXt |   2051.216   865.5293     2.37   0.018     350.1514     3
+> 752.28
+  Mla14pcXt2 |  -1776.243   724.7847    -2.45   0.015    -3200.695   -35
+> 1.7905
+      MopcXt |  -438.7519   548.3599    -0.80   0.424    -1516.469    63
+> 8.9648
+     MopcXt2 |   416.8376   403.9091     1.03   0.303    -376.9834    12
+> 10.659
+MlogincomeXt |  -20.40529   68.81151    -0.30   0.767    -155.6437    11
+> 4.8331
+Mloginc~eXt2 |    59.6902   59.02884     1.01   0.312    -56.32188    17
+> 5.7023
+   MlogempXt |  -24.65632   16.02434    -1.54   0.125    -56.14968     6
+> .83704
+  MlogempXt2 |   13.47266    12.9425     1.04   0.298    -11.96382    38
+> .90914
+    Mlpop2Xt |  -2.759302   1.381505    -2.00   0.046    -5.474436   -.0
+> 441668
+   Mlpop2Xt2 |   1.852406   1.174662     1.58   0.116    -.4562111    4.
+> 161023
+      MUR2Xt |  -.1494012   .0634828    -2.35   0.019    -.2741669   -.0
+> 246355
+     MUR2Xt2 |   .0872819   .0466822     1.87   0.062    -.0044647    .1
+> 790285
+ Mpovrate2Xt |   .0070186   .0091977     0.76   0.446     -.011058    .0
+> 250953
+Mpovrate2Xt2 |  -.0058831   .0070238    -0.84   0.403    -.0196872    .0
+> 079211
+    MATWI2Xt |   56418.42   25070.02     2.25   0.025     7147.166    10
+> 5689.7
+   MATWI2Xt2 |  -40912.58   22454.73    -1.82   0.069    -85043.89    32
+> 18.738
+Mcrack_i~2Xt |   .1930049   .7472616     0.26   0.796    -1.275622    1.
+> 661632
+Mcrack_~2Xt2 |  -.2344711    .473088    -0.50   0.620    -1.164253    .6
+> 953104
+  Mla14pc2Xt |  -340227.3   150660.9    -2.26   0.024      -636328    -4
+> 4126.7
+ Mla14pc2Xt2 |   300329.5   118540.1     2.53   0.012     67357.12    53
+> 3301.8
+     Mopc2Xt |   77309.17   47187.48     1.64   0.102    -15430.54    17
+> 0048.9
+    Mopc2Xt2 |  -66219.28   35218.98    -1.88   0.061    -135436.8    29
+> 98.188
+Mloginco~2Xt |   .9556869   3.625544     0.26   0.792    -6.169759    8.
+> 081133
+Mloginc~2Xt2 |  -3.020407   3.108091    -0.97   0.332    -9.128881    3.
+> 088067
+  Mlogemp2Xt |   1.339245   .8131822     1.65   0.100    -.2589393    2.
+> 937429
+ Mlogemp2Xt2 |  -.7355651   .6623554    -1.11   0.267    -2.037322    .5
+> 661923
+     lpop0Xt |  -26.69326   33.31466    -0.80   0.423    -92.16808    38
+> .78156
+    lpop0Xt2 |    12.3942   20.63333     0.60   0.548    -28.15741    52
+> .94582
+       UR0Xt |   1.771495   .6885639     2.57   0.010      .418229    3.
+> 124761
+      UR0Xt2 |  -.9305939   .4045767    -2.30   0.022    -1.725727    -.
+> 135461
+  povrate0Xt |   1.299656   2.498889     0.52   0.603    -3.611523    6.
+> 210836
+ povrate0Xt2 |  -.6029059    1.03596    -0.58   0.561    -2.638926    1.
+> 433114
+     ATWI0Xt |  -81.33408   1483.915    -0.05   0.956     -2997.74    28
+> 35.072
+    ATWI0Xt2 |   -224.474   975.8255    -0.23   0.818    -2142.308     1
+> 693.36
+crack_in~0Xt |  -.4307367   1.182429    -0.36   0.716    -2.754618    1.
+> 893144
+crack_i~0Xt2 |  -.3524731   .7707478    -0.46   0.648    -1.867259    1.
+> 162313
+   la14pc0Xt |   18380.64    10942.8     1.68   0.094    -3125.741    39
+> 887.02
+  la14pc0Xt2 |  -8391.002   4952.019    -1.69   0.091    -18123.43    13
+> 41.427
+      opc0Xt |   1328.008     578.44     2.30   0.022     191.1735    24
+> 64.843
+     opc0Xt2 |  -887.1931   383.1024    -2.32   0.021    -1640.122   -13
+> 4.2644
+logincome0Xt |  -68.47354   69.33681    -0.99   0.324    -204.7443    67
+> .79726
+loginco~0Xt2 |   23.95655   43.95636     0.55   0.586     -62.4329     1
+> 10.346
+   logemp0Xt |    1.05791   16.13595     0.07   0.948    -30.65481    32
+> .77063
+  logemp0Xt2 |   2.257167   9.907071     0.23   0.820    -17.21365    21
+> .72799
+    Dlpop0Xt |  -5.809107   11.44335    -0.51   0.612    -28.29924    16
+> .68102
+   Dlpop0Xt2 |   1.656918   7.870335     0.21   0.833    -13.81101    17
+> .12485
+      DUR0Xt |   -.057602   .2356722    -0.24   0.807    -.5207792    .4
+> 055753
+     DUR0Xt2 |   .0269075   .1462799     0.18   0.854     -.260583     .
+> 314398
+ Dpovrate0Xt |   5.230008   3.359917     1.56   0.120    -1.373391    11
+> .83341
+Dpovrate0Xt2 |  -2.068588   1.495167    -1.38   0.167    -5.007108    .8
+> 699331
+    DATWI0Xt |  -3661.581   2962.462    -1.24   0.217    -9483.842     2
+> 160.68
+   DATWI0Xt2 |   2292.601   2072.516     1.11   0.269    -1780.609    63
+> 65.812
+Dcrack_i~0Xt |   .0294509   .9172668     0.03   0.974    -1.773295    1.
+> 832197
+Dcrack_~0Xt2 |  -.1685817   .5939621    -0.28   0.777    -1.335923     .
+> 998759
+  Dla14pc0Xt |   6746.192   3384.475     1.99   0.047     94.52829    13
+> 397.86
+ Dla14pc0Xt2 |  -3992.725   2024.884    -1.97   0.049    -7972.322   -13
+> .12836
+     Dopc0Xt |     156.95   282.7276     0.56   0.579    -398.7075    71
+> 2.6075
+    Dopc0Xt2 |  -101.1289   156.1158    -0.65   0.517    -407.9504    20
+> 5.6925
+Dloginco~0Xt |  -5.765287   3.269374    -1.76   0.079    -12.19074    .6
+> 601625
+Dloginc~0Xt2 |   2.523644   2.148419     1.17   0.241    -1.698742     6
+> .74603
+  Dlogemp0Xt |   3.700051   4.947063     0.75   0.455    -6.022638    13
+> .42274
+ Dlogemp0Xt2 |  -3.023857   3.513691    -0.86   0.390    -9.929473     3
+> .88176
+    lpop02Xt |   1.293132   1.669171     0.77   0.439    -1.987367     4
+> .57363
+   lpop02Xt2 |  -.6275807   1.035782    -0.61   0.545     -2.66325    1.
+> 408089
+      UR02Xt |  -.1023467   .0423886    -2.41   0.016    -.1856548   -.0
+> 190385
+     UR02Xt2 |   .0562886   .0238204     2.36   0.019     .0094731     .
+> 103104
+ povrate02Xt |  -.0907862   .0649729    -1.40   0.163    -.2184804    .0
+> 369079
+povrate02Xt2 |   .0391524   .0267557     1.46   0.144    -.0134318    .0
+> 917365
+    ATWI02Xt |  -18991.27   17511.97    -1.08   0.279    -53408.36    15
+> 425.81
+   ATWI02Xt2 |   15689.34   12753.07     1.23   0.219    -9374.851    40
+> 753.53
+crack_in~2Xt |  -2.881105   1.586573    -1.82   0.070     -5.99927    .2
+> 370592
+crack_i~2Xt2 |   2.592958   1.048486     2.47   0.014     .5323211    4.
+> 653595
+  la14pc02Xt |   -6548036    3878133    -1.69   0.092    -1.42e+07     1
+> 073836
+ la14pc02Xt2 |    2977352    1767914     1.68   0.093      -497211     6
+> 451914
+     opc02Xt |  -172971.9   72398.03    -2.39   0.017      -315259   -30
+> 684.72
+    opc02Xt2 |   127122.6   52441.33     2.42   0.016     24057.27    23
+> 0187.9
+logincom~2Xt |   3.613503   3.867711     0.93   0.351    -3.987887    11
+> .21489
+loginco~2Xt2 |  -1.276233   2.448605    -0.52   0.602    -6.088589    3.
+> 536122
+  logemp02Xt |  -.0679458   .8917137    -0.08   0.939    -1.820471     1
+> .68458
+ logemp02Xt2 |  -.1136081   .5433711    -0.21   0.834     -1.18152    .9
+> 543039
+ _Iyear_1982 |   11.91385    13.1412     0.91   0.365    -13.91315    37
+> .74084
+ _Iyear_1983 |   21.37603   24.37874     0.88   0.381    -26.53663    69
+> .28868
+ _Iyear_1984 |    27.8155   33.83894     0.82   0.412    -38.68971    94
+> .32072
+ _Iyear_1985 |   30.59234   41.40327     0.74   0.460    -50.77939    11
+> 1.9641
+ _Iyear_1986 |   30.00485   47.20452     0.64   0.525    -62.76834     1
+> 22.778
+ _Iyear_1987 |   26.59965   51.26188     0.52   0.604    -74.14766     1
+> 27.347
+ _Iyear_1988 |   19.87597   53.66382     0.37   0.711    -85.59199    12
+> 5.3439
+ _Iyear_1989 |   10.16137   54.49473     0.19   0.852    -96.93962    11
+> 7.2624
+ _Iyear_1990 |  -3.153149   53.91759    -0.06   0.953    -109.1199    10
+> 2.8136
+ _Iyear_1991 |   -19.5348   52.19237    -0.37   0.708    -122.1108    83
+> .04123
+ _Iyear_1992 |  -39.23988   49.79964    -0.79   0.431    -137.1134    58
+> .63362
+ _Iyear_1993 |  -62.33868   47.40751    -1.31   0.189    -155.5108    30
+> .83346
+ _Iyear_1994 |  -88.09798   46.15148    -1.91   0.057    -178.8016    2.
+> 605633
+ _Iyear_1995 |  -117.8172    47.4189    -2.48   0.013    -211.0117   -24
+> .62264
+ _Iyear_1996 |  -150.7971   52.44121    -2.88   0.004    -253.8622   -47
+> .73203
+ _Iyear_1997 |   -186.611   61.67624    -3.03   0.003    -307.8261   -65
+> .39587
+ _Iyear_1998 |   -225.516   74.79336    -3.02   0.003    -372.5107   -78
+> .52116
+ _Iyear_1999 |  -268.2584   91.29296    -2.94   0.003    -447.6806   -88
+> .83615
+       _cons |  -7.056683   37.86153    -0.19   0.852    -81.46768    67
+> .35431
+------------------------------------------------------------------------
+> ------
+
+. reg Dyprop irca `AllProp' `tdums' , cluster(statenum) ;
+note: prop0 omitted because of collinearity
+note: prop0Xt omitted because of collinearity
+note: prop0Xt2 omitted because of collinearity
+note: prop02 omitted because of collinearity
+note: prop02Xt omitted because of collinearity
+note: prop02Xt2 omitted because of collinearity
+note: Dprop0 omitted because of collinearity
+note: Dprop0Xt omitted because of collinearity
+note: Dprop0Xt2 omitted because of collinearity
+note: Dprop02 omitted because of collinearity
+note: Dprop02Xt omitted because of collinearity
+note: Dprop02Xt2 omitted because of collinearity
+note: DpovrateXt omitted because of collinearity
+note: DpovrateXt2 omitted because of collinearity
+note: Dpovrate2Xt omitted because of collinearity
+note: Dpovrate2Xt2 omitted because of collinearity
+note: DlpopXDpovrateXt omitted because of collinearity
+note: DlpopXDpovrateXt2 omitted because of collinearity
+note: DURXDpovrateXt omitted because of collinearity
+note: DURXDpovrateXt2 omitted because of collinearity
+note: DpovrateXDATWIXt omitted because of collinearity
+note: DpovrateXDATWIXt2 omitted because of collinearity
+note: DpovrateXDcrack_indexXt omitted because of collinearity
+note: DpovrateXDcrack_indexXt2 omitted because of collinearity
+note: DpovrateXDla14pcXt omitted because of collinearity
+note: DpovrateXDla14pcXt2 omitted because of collinearity
+note: DpovrateXDopcXt omitted because of collinearity
+note: DpovrateXDopcXt2 omitted because of collinearity
+note: DpovrateXDlogincomeXt omitted because of collinearity
+note: DpovrateXDlogincomeXt2 omitted because of collinearity
+note: DpovrateXDlogempXt omitted because of collinearity
+note: DpovrateXDlogempXt2 omitted because of collinearity
+
+Linear regression                               Number of obs     =     
+>  4,806
+                                                F(285, 442)       =     
+>      .
+                                                Prob > F          =     
+>      .
+                                                R-squared         =     
+> 0.1085
+                                                Root MSE          =     
+> .79824
+
+                             (Std. Err. adjusted for 443 clusters in sta
+> tenum)
+------------------------------------------------------------------------
+> ------
+             |               Robust
+      Dyprop |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Int
+> erval]
+-------------+----------------------------------------------------------
+> ------
+        irca |   3.495724   19.95759     0.18   0.861    -35.72784    42
+> .71929
+       prop0 |          0  (omitted)
+     prop0Xt |          0  (omitted)
+    prop0Xt2 |          0  (omitted)
+      prop02 |          0  (omitted)
+    prop02Xt |          0  (omitted)
+   prop02Xt2 |          0  (omitted)
+      Dprop0 |          0  (omitted)
+    Dprop0Xt |          0  (omitted)
+   Dprop0Xt2 |          0  (omitted)
+     Dprop02 |          0  (omitted)
+   Dprop02Xt |          0  (omitted)
+  Dprop02Xt2 |          0  (omitted)
+       Dlpop |   6.556185   5.535543     1.18   0.237     -4.32307    17
+> .43544
+         DUR |   .1637075   .1326891     1.23   0.218    -.0970724    .4
+> 244874
+    Dpovrate |   -.040143   .0434162    -0.92   0.356    -.1254707    .0
+> 451847
+       DATWI |   233.7195   967.7172     0.24   0.809    -1668.179    21
+> 35.618
+Dcrack_index |    .744321   .7348833     1.01   0.312    -.6999787    2.
+> 188621
+     Dla14pc |  -538.1503   1436.532    -0.37   0.708    -3361.431    22
+> 85.131
+        Dopc |  -62.98934    283.204    -0.22   0.824     -619.583    49
+> 3.6043
+  Dlogincome |  -1.646455   1.971484    -0.84   0.404    -5.521103    2.
+> 228194
+     Dlogemp |  -1.203739   2.719715    -0.44   0.658     -6.54892    4.
+> 141442
+      Dlpop2 |   12.73561   68.08221     0.19   0.852    -121.0694    14
+> 6.5407
+        DUR2 |  -.0663508   .0264164    -2.51   0.012    -.1182682   -.0
+> 144334
+   Dpovrate2 |  -.0051789   .0044773    -1.16   0.248    -.0139784    .0
+> 036205
+      DATWI2 |   -1124583   499387.4    -2.25   0.025     -2106052   -14
+> 3114.4
+Dcrack_in~x2 |   .0218658   .3769669     0.06   0.954    -.7190044     .
+> 762736
+    Dla14pc2 |    1573730    1123642     1.40   0.162    -634615.4     3
+> 782075
+       Dopc2 |   38714.91   29440.42     1.32   0.189    -19145.68     9
+> 6575.5
+ Dlogincome2 |  -1.396444   3.836512    -0.36   0.716    -8.936517    6.
+> 143628
+    Dlogemp2 |   3.461428    32.6478     0.11   0.916    -60.70278    67
+> .62563
+   DlpopXDUR |   -2.34539   2.458108    -0.95   0.341    -7.176422    2.
+> 485642
+DlpopXDpov~e |  -1.707227   1.100431    -1.55   0.122    -3.869955    .4
+> 555014
+ DlpopXDATWI |  -22449.51   17099.01    -1.31   0.190    -56054.96    11
+> 155.95
+DlpopXDcra~x |   1.970501   10.13323     0.19   0.846     -17.9448    21
+> .88581
+DlpopXDla1~c |  -24468.16   32693.36    -0.75   0.455    -88721.91     3
+> 9785.6
+  DlpopXDopc |  -2045.587   5847.372    -0.35   0.727    -13537.69    94
+> 46.521
+DlpopXDlog~e |  -24.81486   35.55893    -0.70   0.486    -94.70043    45
+> .07072
+DlpopXDlog~p |  -118.4563   69.31602    -1.71   0.088    -254.6862    17
+> .77362
+DURXDpovrate |   .0089539   .0139658     0.64   0.522    -.0184937    .0
+> 364015
+   DURXDATWI |  -1341.379   412.0324    -3.26   0.001    -2151.165   -53
+> 1.5931
+DURXDcrack~x |   .5786462   .1964321     2.95   0.003     .1925893    .9
+> 647032
+ DURXDla14pc |  -449.7387   463.5949    -0.97   0.333    -1360.863    46
+> 1.3855
+    DURXDopc |  -105.6192   112.8023    -0.94   0.350    -327.3146    11
+> 6.0763
+DURXDlogin~e |   .9958572   .8340532     1.19   0.233    -.6433456     2
+> .63506
+ DURXDlogemp |    .730161   1.429457     0.51   0.610    -2.079215    3.
+> 539538
+DpovrateXD~I |  -155.9959   310.5679    -0.50   0.616    -766.3692    45
+> 4.3774
+DpovrateXD~x |   .1620026   .0761416     2.13   0.034      .012358    .3
+> 116472
+Dpovrate~4pc |  -94.51529   53.91563    -1.75   0.080    -200.4781    11
+> .44756
+Dpovrate~opc |  -67.14947   34.03751    -1.97   0.049    -134.0449   -.2
+> 540093
+DpovrateXD~e |  -.4564368   .3207497    -1.42   0.155    -1.086821    .1
+> 739473
+DpovrateXD~p |   .8439173     .40091     2.11   0.036     .0559906    1.
+> 631844
+DATWIXDcra~x |   1037.517   1330.987     0.78   0.436    -1578.333    36
+> 53.367
+DATWIXDla1~c |   -8661636    5905623    -1.47   0.143    -2.03e+07     2
+> 944953
+  DATWIXDopc |  -190178.8   548315.4    -0.35   0.729     -1267808    88
+> 7450.4
+DATWIXDlog~e |  -6338.643   6568.082    -0.97   0.335    -19247.19    65
+> 69.908
+DATWIXDlog~p |  -4970.134    12619.2    -0.39   0.694    -29771.22    19
+> 830.95
+Dcrack_i~4pc |   51.71102   1261.419     0.04   0.967    -2427.414    25
+> 30.836
+Dcrack_i~opc |  -389.5715   732.4628    -0.53   0.595    -1829.114    10
+> 49.971
+Dcrack_ind~e |  -7.032854   5.481426    -1.28   0.200    -17.80575    3.
+> 740042
+Dcrack_ind~p |   .3102936   8.311057     0.04   0.970    -16.02381    16
+> .64439
+Dla14pcXDopc |  -412915.9    1437657    -0.29   0.774     -3238408     2
+> 412577
+Dla14pcXDl~e |  -6956.574   11221.81    -0.62   0.536     -29011.3    15
+> 098.15
+Dla14pcXDl~p |  -25555.72    15365.6    -1.66   0.097    -55754.43    46
+> 42.985
+DopcXDlogi~e |    331.094    1798.25     0.18   0.854    -3203.088    38
+> 65.276
+DopcXDlogemp |  -4529.064   4511.602    -1.00   0.316    -13395.92    43
+> 37.793
+Dlogincome~p |   19.63101   22.18323     0.88   0.377     -23.9667    63
+> .22872
+       Llpop |   12.60284    13.6116     0.93   0.355    -14.14866    39
+> .35433
+         LUR |   .8240239   .2782089     2.96   0.003     .2772472    1.
+> 370801
+    Lpovrate |   .3408242   1.113746     0.31   0.760    -1.848071     2
+> .52972
+       LATWI |  -586.8982   510.8277    -1.15   0.251    -1590.851    41
+> 7.0548
+Lcrack_index |   .4616463   .3380187     1.37   0.173    -.2026774     1
+> .12597
+     Lla14pc |   1607.398   958.5607     1.68   0.094    -276.5051    34
+> 91.301
+        Lopc |  -1.654431   151.5153    -0.01   0.991    -299.4344    29
+> 6.1256
+  Llogincome |  -16.67144   17.91382    -0.93   0.353    -51.87829    18
+> .53542
+     Llogemp |  -12.82509   7.582101    -1.69   0.091    -27.72653    2.
+> 076362
+      Llpop2 |   -.662963   .6588387    -1.01   0.315    -1.957809    .6
+> 318828
+        LUR2 |  -.0379813   .0167894    -2.26   0.024    -.0709782   -.0
+> 049844
+   Lpovrate2 |  -.0150164   .0219039    -0.69   0.493    -.0580652    .0
+> 280325
+      LATWI2 |   9423.068   8288.381     1.14   0.256    -6866.465     2
+> 5712.6
+Lcrack_in~x2 |   .2932433   .1883301     1.56   0.120    -.0768905    .6
+> 633771
+    Lla14pc2 |  -215825.7   88303.85    -2.44   0.015    -389373.3   -42
+> 278.13
+       Lopc2 |  -2589.821   5524.879    -0.47   0.639    -13448.12    82
+> 68.475
+ Llogincome2 |   .8638104   1.001325     0.86   0.389    -1.104138    2.
+> 831759
+    Llogemp2 |   .7039602   .4064159     1.73   0.084    -.0947876    1.
+> 502708
+       Mlpop |  -8.351616   4.922834    -1.70   0.090    -18.02669    1.
+> 323454
+         MUR |  -.8752176    .252511    -3.47   0.001    -1.371489   -.3
+> 789462
+    Mpovrate |   .0730618   .1200024     0.61   0.543    -.1627844    .3
+> 089081
+       MATWI |   682.8779   323.0669     2.11   0.035     47.93985    13
+> 17.816
+Mcrack_index |   1.133891   .4350138     2.61   0.009     .2789385    1.
+> 988844
+     Mla14pc |  -594.1995   194.6243    -3.05   0.002    -976.7035   -21
+> 1.6955
+        Mopc |   119.6602   117.8119     1.02   0.310    -111.8809    35
+> 1.2012
+  Mlogincome |   33.37188   13.42209     2.49   0.013     6.992825    59
+> .75093
+     Mlogemp |  -1.713173   2.851237    -0.60   0.548    -7.316839    3.
+> 890493
+      Mlpop2 |   .4207336    .248201     1.70   0.091    -.0670671    .9
+> 085343
+        MUR2 |   .0539028   .0162813     3.31   0.001     .0219043    .0
+> 859012
+   Mpovrate2 |  -.0023067   .0022575    -1.02   0.307    -.0067434      
+> .00213
+      MATWI2 |   -11606.5   7139.178    -1.63   0.105    -25637.45    24
+> 24.455
+Mcrack_in~x2 |  -.2616012   .2204206    -1.19   0.236    -.6948039    .1
+> 716016
+    Mla14pc2 |   85595.19   36094.69     2.37   0.018     14656.66    15
+> 6533.7
+       Mopc2 |   -19900.5   10644.57    -1.87   0.062    -40820.77    10
+> 19.763
+ Mlogincome2 |  -1.784556    .710056    -2.51   0.012    -3.180062    -.
+> 389051
+    Mlogemp2 |   .0464717   .1497597     0.31   0.756    -.2478579    .3
+> 408013
+       lpop0 |  -1.328268   14.26151    -0.09   0.926    -29.35706    26
+> .70053
+         UR0 |  -.7750502   .2436275    -3.18   0.002    -1.253862   -.2
+> 962378
+    povrate0 |  -.4488352   1.105425    -0.41   0.685    -2.621376    1.
+> 723706
+       ATWI0 |  -56.53263   567.9568    -0.10   0.921    -1172.764    10
+> 59.699
+crack_index0 |  -.0393969   .4440261    -0.09   0.929    -.9120616    .8
+> 332679
+     la14pc0 |   4410.209     3701.3     1.19   0.234    -2864.124    11
+> 684.54
+        opc0 |  -121.8014   172.5045    -0.71   0.481    -460.8323    21
+> 7.2296
+  logincome0 |  -1.359546    22.7549    -0.06   0.952    -46.08079     4
+> 3.3617
+     logemp0 |   12.38527   6.749131     1.84   0.067    -.8791008    25
+> .64965
+      Dlpop0 |   1.943131   3.133289     0.62   0.535    -4.214864    8.
+> 101126
+        DUR0 |  -.0316832   .0903766    -0.35   0.726    -.2093044     .
+> 145938
+   Dpovrate0 |  -7.780965   3.388574    -2.30   0.022    -14.44068   -1.
+> 121245
+      DATWI0 |   676.2978   970.9773     0.70   0.486    -1232.008    25
+> 84.604
+Dcrack_ind~0 |   .0045375   .2815764     0.02   0.987    -.5488574    .5
+> 579324
+    Dla14pc0 |   1448.684   1151.332     1.26   0.209    -814.0805    37
+> 11.449
+       Dopc0 |   37.32434   135.0016     0.28   0.782    -228.0005    30
+> 2.6492
+ Dlogincome0 |   .7773059   .9754418     0.80   0.426    -1.139774    2.
+> 694386
+    Dlogemp0 |  -.2146107   1.479013    -0.15   0.885    -3.121383    2.
+> 692161
+      lpop02 |   .0890565   .6979345     0.13   0.899    -1.282626    1.
+> 460739
+        UR02 |   .0427327   .0153457     2.78   0.006     .0125731    .0
+> 728924
+   povrate02 |   .0179031   .0216017     0.83   0.408    -.0245517    .0
+> 603578
+      ATWI02 |   564.7426   6085.098     0.09   0.926    -11394.58    12
+> 524.06
+crack_ind~02 |  -.0282958   .4966345    -0.06   0.955    -1.004354    .9
+> 477626
+    la14pc02 |   -2309738    1285096    -1.80   0.073     -4835395    21
+> 5919.4
+       opc02 |   31605.83   18374.29     1.72   0.086    -4505.994    67
+> 717.65
+ logincome02 |   .1213133   1.260224     0.10   0.923    -2.355462    2.
+> 598089
+    logemp02 |  -.6257737   .3630064    -1.72   0.085    -1.339207    .0
+> 876594
+     DlpopXt |  -31.41143   19.38861    -1.62   0.106    -69.51675    6.
+> 693898
+    DlpopXt2 |   18.93031   13.40724     1.41   0.159    -7.419551    45
+> .28017
+       DURXt |  -.4829356     .38134    -1.27   0.206    -1.232401    .2
+> 665293
+      DURXt2 |   .2643088   .2308604     1.14   0.253    -.1894117    .7
+> 180293
+  DpovrateXt |          0  (omitted)
+ DpovrateXt2 |          0  (omitted)
+     DATWIXt |  -3405.143   4682.272    -0.73   0.467    -12607.43    57
+> 97.139
+    DATWIXt2 |   4737.926   4705.993     1.01   0.315    -4510.976    13
+> 986.83
+Dcrack_i~xXt |  -1.966618   1.765069    -1.11   0.266    -5.435588    1.
+> 502352
+Dcrack_~xXt2 |   .9233094   .9527665     0.97   0.333    -.9492061    2.
+> 795825
+   Dla14pcXt |   2059.957   3563.668     0.58   0.564    -4943.882    90
+> 63.796
+  Dla14pcXt2 |  -1535.489    2012.44    -0.76   0.446    -5490.629    24
+> 19.651
+      DopcXt |  -182.3034   921.6672    -0.20   0.843    -1993.698    16
+> 29.091
+     DopcXt2 |   301.8084   613.3103     0.49   0.623    -903.5582    15
+> 07.175
+DlogincomeXt |   5.496241    5.84478     0.94   0.348    -5.990771    16
+> .98325
+Dloginc~eXt2 |  -2.431521   3.732135    -0.65   0.515    -9.766456    4.
+> 903415
+   DlogempXt |   2.651133   8.717653     0.30   0.761    -14.48207    19
+> .78433
+  DlogempXt2 |  -2.492056   5.884394    -0.42   0.672    -14.05692    9.
+> 072813
+    Dlpop2Xt |  -164.1111   277.6581    -0.59   0.555    -709.8052    38
+> 1.5829
+   Dlpop2Xt2 |   165.3525   212.4289     0.78   0.437    -252.1436    58
+> 2.8487
+      DUR2Xt |   .1275877   .0742303     1.72   0.086    -.0183005    .2
+> 734759
+     DUR2Xt2 |  -.0570052   .0505281    -1.13   0.260    -.1563103      
+>  .0423
+ Dpovrate2Xt |          0  (omitted)
+Dpovrate2Xt2 |          0  (omitted)
+    DATWI2Xt |    5519019    2368873     2.33   0.020     863365.8    1.
+> 02e+07
+   DATWI2Xt2 |   -4369447    1945167    -2.25   0.025     -8192372   -54
+> 6521.3
+Dcrack_i~2Xt |   .3949001   1.089889     0.36   0.717    -1.747108    2.
+> 536908
+Dcrack_~2Xt2 |   -.282757   .6315081    -0.45   0.655    -1.523889    .9
+> 583747
+  Dla14pc2Xt |   -4408799    2974162    -1.48   0.139    -1.03e+07     1
+> 436457
+ Dla14pc2Xt2 |    2917441    1815240     1.61   0.109    -650133.5     6
+> 485015
+     Dopc2Xt |   -93869.2   111879.3    -0.84   0.402    -313750.7    12
+> 6012.3
+    Dopc2Xt2 |   33016.48   82027.42     0.40   0.688    -128195.7    19
+> 4228.7
+Dloginco~2Xt |   14.49422   16.69686     0.87   0.386    -18.32089    47
+> .30933
+Dloginc~2Xt2 |  -11.69058   12.86995    -0.91   0.364    -36.98448    13
+> .60331
+  Dlogemp2Xt |  -37.84339   91.95991    -0.41   0.681    -218.5764    14
+> 2.8896
+ Dlogemp2Xt2 |   13.69824    68.1288     0.20   0.841    -120.1984    14
+> 7.5949
+ DlpopXDURXt |   8.148581   8.971636     0.91   0.364    -9.483785    25
+> .78095
+DlpopXDURXt2 |  -5.812974   6.743097    -0.86   0.389    -19.06549    7.
+> 439542
+DlpopXDpov~t |          0  (omitted)
+DlpopXDpov~2 |          0  (omitted)
+DlpopXDATW~t |   73311.13   85521.12     0.86   0.392    -94767.42    24
+> 1389.7
+DlpopXDATW~2 |  -61181.22   84662.89    -0.72   0.470    -227573.1    10
+> 5210.6
+DlpopXDcra~t |   9.080051    27.2249     0.33   0.739    -44.42629    62
+> .58639
+DlpopXDcra~2 |  -7.149473   17.82235    -0.40   0.689    -42.17655    27
+> .87761
+DlpopXDla1~t |   54731.28   86317.18     0.63   0.526    -114911.8    22
+> 4374.4
+DlpopXDla1~2 |  -25955.68   52965.87    -0.49   0.624    -130051.9    78
+> 140.56
+DlpopXDopcXt |   3563.195    24287.3     0.15   0.883    -44169.74    51
+> 296.13
+DlpopXDopc~2 |   7398.338   18361.22     0.40   0.687    -28687.81    43
+> 484.48
+DlpopXDl~eXt |   260.8858   161.1682     1.62   0.106    -55.86537     5
+> 77.637
+DlpopX~meXt2 |  -192.6184   120.9279    -1.59   0.112    -430.2835    45
+> .04662
+DlpopXDl~pXt |   487.9755   222.1284     2.20   0.029     51.41647    92
+> 4.5345
+DlpopXD~pXt2 |  -366.2517    163.027    -2.25   0.025    -686.6561    -4
+> 5.8473
+DURXDpovra~t |          0  (omitted)
+DURXDpovra~2 |          0  (omitted)
+ DURXDATWIXt |   5554.784   1731.105     3.21   0.001     2152.565    89
+> 57.003
+DURXDATWIXt2 |  -4526.593   1379.557    -3.28   0.001    -7237.899   -18
+> 15.286
+DURXDcrack~t |  -1.718586   .5668023    -3.03   0.003    -2.832548   -.6
+> 046235
+DURXDcrack~2 |   .9888296   .3464328     2.85   0.005     .3079694     1
+> .66969
+DURXDla14p~t |   956.7318   1205.716     0.79   0.428    -1412.917    33
+> 26.381
+DURXDla14p~2 |  -457.4751   754.1421    -0.61   0.544    -1939.625    10
+> 24.675
+  DURXDopcXt |   440.0775   456.8485     0.96   0.336    -457.7877    13
+> 37.943
+ DURXDopcXt2 |  -268.0494   301.7374    -0.89   0.375    -861.0677     3
+> 24.969
+DURXDlogin~t |  -5.146595   2.915206    -1.77   0.078    -10.87598    .5
+> 827915
+DURXDlogin~2 |   3.218751     1.8824     1.71   0.088    -.4808165    6.
+> 918318
+DURXDlogem~t |  -2.296624   5.343034    -0.43   0.668    -12.79753    8.
+> 204284
+DURXDlogem~2 |   .5829787   3.623623     0.16   0.872    -6.538692    7.
+> 704649
+Dpovrate~IXt |          0  (omitted)
+Dpovrat~IXt2 |          0  (omitted)
+Dpovrate~xXt |          0  (omitted)
+Dpovrat~xXt2 |          0  (omitted)
+Dpovra~4pcXt |          0  (omitted)
+Dpovr~4pcXt2 |          0  (omitted)
+Dpovra~opcXt |          0  (omitted)
+Dpovr~opcXt2 |          0  (omitted)
+Dpovrate~eXt |          0  (omitted)
+Dpovra~meXt2 |          0  (omitted)
+Dpovrate~pXt |          0  (omitted)
+Dpovrat~pXt2 |          0  (omitted)
+DATWIXDcra~t |  -2241.521   4070.328    -0.55   0.582    -10241.12    57
+> 58.079
+DATWIXDcra~2 |  -110.0285   3608.384    -0.03   0.976     -7201.75    69
+> 81.693
+DATWIXDla1~t |   2.80e+07   1.70e+07     1.64   0.101     -5479417    6.
+> 14e+07
+DATWIXDla1~2 |  -2.14e+07   1.19e+07    -1.80   0.073    -4.48e+07     1
+> 977473
+DATWIXDopcXt |    1502434    4197314     0.36   0.721     -6746738     9
+> 751606
+DATWIXDopc~2 |   -3074280    3790794    -0.81   0.418    -1.05e+07     4
+> 375940
+DATWIXDl~eXt |   59456.23   46455.25     1.28   0.201     -31844.4    15
+> 0756.9
+DATWIXD~eXt2 |  -54649.16   49716.84    -1.10   0.272    -152359.9     4
+> 3061.6
+DATWIXDl~pXt |   23962.38   62177.49     0.39   0.700    -98237.88    14
+> 6162.6
+DATWIXD~pXt2 |  -24348.74   49751.06    -0.49   0.625    -122126.8    73
+> 429.28
+Dcrack~4pcXt |   141.0489   3198.142     0.04   0.965    -6144.405    64
+> 26.503
+Dcrac~4pcXt2 |   -336.803   1791.828    -0.19   0.851    -3858.364    31
+> 84.758
+Dcrack~opcXt |   1623.966   2425.352     0.67   0.503    -3142.688    63
+> 90.621
+Dcrac~opcXt2 |  -1197.714   1776.645    -0.67   0.501    -4689.434    22
+> 94.007
+Dcrack_i~eXt |   12.68244   14.68075     0.86   0.388     -16.1703    41
+> .53518
+Dcrack_~eXt2 |   -3.73288   8.906563    -0.42   0.675    -21.23735     1
+> 3.7716
+Dcrack_i~pXt |  -3.444936   21.19272    -0.16   0.871    -45.09595    38
+> .20608
+Dcrack_~pXt2 |   1.306488   12.56895     0.10   0.917    -23.39584    26
+> .00882
+Dla14pcXDo~t |    1562575    3810251     0.41   0.682     -5925886     9
+> 051035
+Dla14pcXDo~2 |   -1326419    2375528    -0.56   0.577     -5995151     3
+> 342314
+Dla14pcX~eXt |   12632.73   27396.73     0.46   0.645     -41211.3    66
+> 476.77
+Dla14pc~eXt2 |  -7705.917    15413.1    -0.50   0.617    -37997.98    22
+> 586.14
+Dla14pcX~pXt |   62425.08   39447.82     1.58   0.114    -15103.51    13
+> 9953.7
+Dla14pc~pXt2 |  -34528.34   24408.42    -1.41   0.158    -82499.31    13
+> 442.63
+DopcXDlogi~t |   2182.126   7713.642     0.28   0.777    -12977.85     1
+> 7342.1
+DopcXDlogi~2 |  -4320.859   6078.664    -0.71   0.478    -16267.54    76
+> 25.817
+DopcXDloge~t |   20426.17    16142.4     1.27   0.206    -11299.22    52
+> 151.55
+DopcXDloge~2 |  -17048.68   12867.71    -1.32   0.186    -42338.17    82
+> 40.813
+Dloginco~pXt |   -88.2166   75.71954    -1.17   0.245    -237.0317    60
+> .59847
+Dloginc~pXt2 |   89.15488   55.37037     1.61   0.108    -19.66704    19
+> 7.9768
+     LlpopXt |  -46.02059   24.97328    -1.84   0.066    -95.10172    3.
+> 060542
+    LlpopXt2 |   29.94926   13.98646     2.14   0.033     2.461041    57
+> .43748
+       LURXt |  -1.708871   .7751589    -2.20   0.028    -3.232326   -.1
+> 854162
+      LURXt2 |   .7807726     .47826     1.63   0.103    -.1591736    1.
+> 720719
+  LpovrateXt |  -.4653158   1.863255    -0.25   0.803    -4.127255    3.
+> 196624
+ LpovrateXt2 |   .1063706   .7833544     0.14   0.892    -1.433192    1.
+> 645933
+     LATWIXt |   1594.872   769.0176     2.07   0.039     83.48616    31
+> 06.257
+    LATWIXt2 |  -1252.195   565.6838    -2.21   0.027    -2363.959   -14
+> 0.4308
+Lcrack_i~xXt |  -.7568571   1.209376    -0.63   0.532    -3.133698    1.
+> 619984
+Lcrack_~xXt2 |   .3598022   .8385365     0.43   0.668    -1.288212    2.
+> 007816
+   Lla14pcXt |   -3793.52   2191.897    -1.73   0.084    -8101.356    51
+> 4.3157
+  Lla14pcXt2 |    1964.25   1196.591     1.64   0.101     -387.465    43
+> 15.964
+      LopcXt |    95.8668   451.5142     0.21   0.832    -791.5147    98
+> 3.2483
+     LopcXt2 |   -128.058   297.1566    -0.43   0.667    -712.0734    45
+> 5.9573
+LlogincomeXt |   52.00347   30.06531     1.73   0.084    -7.085246    11
+> 1.0922
+Lloginc~eXt2 |  -63.96545   23.15375    -2.76   0.006    -109.4706   -18
+> .46032
+   LlogempXt |   30.86713   16.86998     1.83   0.068    -2.288206    64
+> .02247
+  LlogempXt2 |   -7.38413   9.801299    -0.75   0.452    -26.64707    11
+> .87881
+    Llpop2Xt |   2.517084   1.206742     2.09   0.038     .1454196    4.
+> 888748
+   Llpop2Xt2 |  -1.596654   .6922609    -2.31   0.022    -2.957186    -.
+> 236122
+      LUR2Xt |   .0727926   .0489319     1.49   0.138    -.0233756    .1
+> 689607
+     LUR2Xt2 |  -.0303929   .0299607    -1.01   0.311    -.0892761    .0
+> 284903
+ Lpovrate2Xt |   .0210397   .0369603     0.57   0.569       -.0516    .0
+> 936795
+Lpovrate2Xt2 |  -.0059198   .0155105    -0.38   0.703    -.0364034    .0
+> 245638
+    LATWI2Xt |  -24559.47   10504.23    -2.34   0.020     -45203.9   -39
+> 15.034
+   LATWI2Xt2 |   18181.86   10160.48     1.79   0.074    -1786.997    38
+> 150.73
+Lcrack_i~2Xt |  -.5574227   .4743164    -1.18   0.241    -1.489618     .
+> 374773
+Lcrack_~2Xt2 |   .1904314   .2728602     0.70   0.486    -.3458331    .7
+> 266959
+  Lla14pc2Xt |   502377.9   202392.7     2.48   0.013     104606.2    90
+> 0149.6
+ Lla14pc2Xt2 |  -260521.4   108866.2    -2.39   0.017    -474481.2   -46
+> 561.61
+     Lopc2Xt |  -5731.145   20075.34    -0.29   0.775    -45186.13    33
+> 723.84
+    Lopc2Xt2 |   7047.179   14579.01     0.48   0.629    -21605.61    35
+> 699.97
+Lloginco~2Xt |   -2.61188   1.635038    -1.60   0.111    -5.825295    .6
+> 015352
+Lloginc~2Xt2 |   3.224808   1.166797     2.76   0.006     .9316485    5.
+> 517967
+  Llogemp2Xt |  -1.834712   .8836099    -2.08   0.038     -3.57131   -.0
+> 981128
+ Llogemp2Xt2 |   .5475086   .4996217     1.10   0.274    -.4344207    1.
+> 529438
+     MlpopXt |    40.5136   26.84628     1.51   0.132    -12.24862    93
+> .27582
+    MlpopXt2 |  -30.12624   23.60727    -1.28   0.203    -76.52269    16
+> .27021
+       MURXt |    1.96261   .8354516     2.35   0.019     .3206593    3.
+> 604562
+      MURXt2 |  -1.046367   .6304217    -1.66   0.098    -2.285364    .1
+> 926291
+  MpovrateXt |  -.2465748   .4727553    -0.52   0.602    -1.175702    .6
+> 825527
+ MpovrateXt2 |   .3239131   .4035299     0.80   0.423    -.4691628    1.
+> 116989
+     MATWIXt |  -2897.256   1588.314    -1.82   0.069    -6018.842    22
+> 4.3298
+    MATWIXt2 |   2562.481   1451.039     1.77   0.078     -289.313    54
+> 14.275
+Mcrack_i~xXt |  -3.352826   1.602952    -2.09   0.037    -6.503181   -.2
+> 024706
+Mcrack_~xXt2 |   2.366696   1.218178     1.94   0.053    -.0274444    4.
+> 760837
+   Mla14pcXt |    2212.28   773.5697     2.86   0.004     691.9486    37
+> 32.612
+  Mla14pcXt2 |  -1802.508   673.5544    -2.68   0.008    -3126.276   -47
+> 8.7414
+      MopcXt |  -627.0867   487.9149    -1.29   0.199    -1586.008    33
+> 1.8348
+     MopcXt2 |   621.9303   371.6386     1.67   0.095     -108.468    13
+> 52.329
+MlogincomeXt |  -129.4522   62.51217    -2.07   0.039    -252.3102   -6.
+> 594187
+Mloginc~eXt2 |   134.8671   54.54471     2.47   0.014     27.66784    24
+> 2.0663
+   MlogempXt |   17.58916   14.09921     1.25   0.213    -10.12067    45
+> .29899
+  MlogempXt2 |   -26.7374   12.00613    -2.23   0.026     -50.3336   -3.
+> 141203
+    Mlpop2Xt |  -2.111136   1.383521    -1.53   0.128    -4.830232    .6
+> 079604
+   Mlpop2Xt2 |   1.471532    1.21664     1.21   0.227    -.9195867    3.
+> 862651
+      MUR2Xt |  -.1112449   .0527873    -2.11   0.036    -.2149901   -.0
+> 074997
+     MUR2Xt2 |   .0537358   .0395322     1.36   0.175    -.0239585    .1
+> 314302
+ Mpovrate2Xt |    .007571   .0083596     0.91   0.366    -.0088585    .0
+> 240005
+Mpovrate2Xt2 |  -.0079228   .0065027    -1.22   0.224    -.0207028    .0
+> 048572
+    MATWI2Xt |   46603.28   24560.91     1.90   0.058    -1667.405    94
+> 873.96
+   MATWI2Xt2 |   -37732.1   22840.79    -1.65   0.099    -82622.14    71
+> 57.941
+Mcrack_i~2Xt |    .702848   .7362425     0.95   0.340    -.7441229    2.
+> 149819
+Mcrack_~2Xt2 |  -.5566245   .4928752    -1.13   0.259    -1.525295    .4
+> 120457
+  Mla14pc2Xt |  -326863.8   137918.7    -2.37   0.018    -597921.7   -55
+> 805.86
+ Mla14pc2Xt2 |   289140.5   115571.6     2.50   0.013     62002.44    51
+> 6278.6
+     Mopc2Xt |   93855.37   43175.24     2.17   0.030     9001.109    17
+> 8709.6
+    Mopc2Xt2 |  -75819.41   32736.52    -2.32   0.021      -140158   -11
+> 480.83
+Mloginco~2Xt |   6.911187   3.299324     2.09   0.037     .4268761     1
+> 3.3955
+Mloginc~2Xt2 |  -7.158927   2.875861    -2.49   0.013    -12.81099   -1.
+> 506866
+  Mlogemp2Xt |  -.6868418   .7391721    -0.93   0.353     -2.13957    .7
+> 658868
+ Mlogemp2Xt2 |   1.247898   .6260464     1.99   0.047      .017501    2.
+> 478296
+     lpop0Xt |  -4.205381   35.51756    -0.12   0.906    -74.00966     6
+> 5.5989
+    lpop0Xt2 |   4.925136   21.75839     0.23   0.821    -37.83763     4
+> 7.6879
+       UR0Xt |   2.183945   .6610892     3.30   0.001     .8846765    3.
+> 483214
+      UR0Xt2 |  -1.410041   .3904886    -3.61   0.000    -2.177487   -.6
+> 425963
+  povrate0Xt |   .8405983   1.832582     0.46   0.647    -2.761058    4.
+> 442254
+ povrate0Xt2 |  -.5219359   .7709501    -0.68   0.499    -2.037119    .9
+> 932474
+     ATWI0Xt |   1103.842   1593.036     0.69   0.489    -2027.024    42
+> 34.708
+    ATWI0Xt2 |  -1155.975   1080.056    -1.07   0.285    -3278.659     9
+> 66.709
+crack_in~0Xt |   .5834618   1.199504     0.49   0.627    -1.773978    2.
+> 940902
+crack_i~0Xt2 |  -.7460442   .7737237    -0.96   0.335    -2.266679    .7
+> 745902
+   la14pc0Xt |  -8396.105   7089.566    -1.18   0.237    -22329.55    55
+> 37.341
+  la14pc0Xt2 |   3786.587    3360.75     1.13   0.260    -2818.449    10
+> 391.62
+      opc0Xt |   615.7937   503.8117     1.22   0.222    -374.3703    16
+> 05.958
+     opc0Xt2 |  -539.9072    327.897    -1.65   0.100    -1184.338    10
+> 4.5237
+logincome0Xt |    35.4101   63.90845     0.55   0.580    -90.19209    16
+> 1.0123
+loginco~0Xt2 |  -38.28714   40.96227    -0.93   0.350    -118.7922    42
+> .21787
+   logemp0Xt |  -42.08682   16.90902    -2.49   0.013    -75.31889   -8.
+> 854745
+  logemp0Xt2 |   31.32551   10.24515     3.06   0.002     11.19024    51
+> .46077
+    Dlpop0Xt |  -6.263159   10.29418    -0.61   0.543    -26.49478    13
+> .96846
+   Dlpop0Xt2 |   3.404811   7.034536     0.48   0.629    -10.42048    17
+> .23011
+      DUR0Xt |   .1596077   .2427341     0.66   0.511    -.3174487    .6
+> 366641
+     DUR0Xt2 |  -.1379997   .1480189    -0.93   0.352     -.428908    .1
+> 529085
+ Dpovrate0Xt |   12.93267   5.755423     2.25   0.025     1.621271    24
+> .24406
+Dpovrate0Xt2 |  -5.134519   2.372751    -2.16   0.031    -9.797796   -.4
+> 712428
+    DATWI0Xt |  -704.2778   3137.676    -0.22   0.823    -6870.896     5
+> 462.34
+   DATWI0Xt2 |   123.5524   2269.927     0.05   0.957    -4337.638    45
+> 84.743
+Dcrack_i~0Xt |   .5409669   .8067143     0.67   0.503    -1.044505    2.
+> 126439
+Dcrack_~0Xt2 |  -.4526523   .5146924    -0.88   0.380    -1.464201     .
+> 558896
+  Dla14pc0Xt |   -1384.61    2899.38    -0.48   0.633    -7082.894    43
+> 13.674
+ Dla14pc0Xt2 |  -423.2116   1747.111    -0.24   0.809    -3856.889    30
+> 10.466
+     Dopc0Xt |  -35.60391   321.9232    -0.11   0.912    -668.2943    59
+> 7.0865
+    Dopc0Xt2 |  -37.03931    176.922    -0.21   0.834    -384.7522    31
+> 0.6736
+Dloginco~0Xt |  -1.976625   2.997548    -0.66   0.510    -7.867842    3.
+> 914592
+Dloginc~0Xt2 |    .486843   2.070078     0.24   0.814    -3.581575    4.
+> 555261
+  Dlogemp0Xt |   1.920972   4.795404     0.40   0.689    -7.503653     1
+> 1.3456
+ Dlogemp0Xt2 |  -1.960814   3.401022    -0.58   0.565    -8.644998     4
+> .72337
+    lpop02Xt |   .1402552   1.752115     0.08   0.936    -3.303256    3.
+> 583767
+   lpop02Xt2 |  -.1575771   1.082483    -0.15   0.884    -2.285029    1.
+> 969875
+      UR02Xt |   -.122532   .0398933    -3.07   0.002    -.2009361   -.0
+> 441279
+     UR02Xt2 |   .0801121   .0224336     3.57   0.000     .0360224    .1
+> 242018
+ povrate02Xt |  -.0307768   .0359228    -0.86   0.392    -.1013775     .
+> 039824
+povrate02Xt2 |   .0154336   .0153646     1.00   0.316    -.0147632    .0
+> 456305
+    ATWI02Xt |  -13828.87   18802.72    -0.74   0.462    -50782.71    23
+> 124.98
+   ATWI02Xt2 |   13754.89   13526.61     1.02   0.310    -12829.57    40
+> 339.35
+crack_in~2Xt |  -1.607394   1.388728    -1.16   0.248    -4.336724    1.
+> 121936
+crack_i~2Xt2 |   1.960224   .9077346     2.16   0.031     .1762113    3.
+> 744236
+  la14pc02Xt |    4634406    2510423     1.85   0.066    -299442.7     9
+> 568255
+ la14pc02Xt2 |   -2240159    1201340    -1.86   0.063     -4601208    12
+> 0890.6
+     opc02Xt |  -127717.2   64661.82    -1.98   0.049    -254800.1    -6
+> 34.414
+    opc02Xt2 |    97054.8   46843.45     2.07   0.039     4991.237    18
+> 9118.4
+logincom~2Xt |  -2.074257   3.535569    -0.59   0.558    -9.022872    4.
+> 874359
+loginco~2Xt2 |   2.168985   2.262916     0.96   0.338    -2.278427    6.
+> 616397
+  logemp02Xt |   2.112811   .9118994     2.32   0.021      .320614    3.
+> 905009
+ logemp02Xt2 |   -1.59498   .5530588    -2.88   0.004    -2.681931   -.5
+> 080279
+ _Iyear_1982 |   13.27709   11.86183     1.12   0.264     -10.0355    36
+> .58969
+ _Iyear_1983 |   25.40257   22.07639     1.15   0.250    -17.98516    68
+> .79031
+ _Iyear_1984 |   35.37492   30.72989     1.15   0.250    -25.01994    95
+> .76979
+ _Iyear_1985 |   42.79072   37.77939     1.13   0.258    -31.45884    11
+> 7.0403
+ _Iyear_1986 |   47.98866   43.30075     1.11   0.268    -37.11227    13
+> 3.0896
+ _Iyear_1987 |   51.39863   47.32672     1.09   0.278    -41.61473     1
+> 44.412
+ _Iyear_1988 |   52.68871   49.94144     1.06   0.292    -45.46348    15
+> 0.8409
+ _Iyear_1989 |   52.10617   51.22203     1.02   0.310    -48.56282    15
+> 2.7752
+ _Iyear_1990 |   49.32303   51.30141     0.96   0.337    -51.50197     1
+> 50.148
+ _Iyear_1991 |   44.54746   50.42668     0.88   0.377     -54.5584    14
+> 3.6533
+ _Iyear_1992 |   37.09382   48.96081     0.76   0.449    -59.13109    13
+> 3.3187
+ _Iyear_1993 |    27.5719   47.41121     0.58   0.561    -65.60751    12
+> 0.7513
+ _Iyear_1994 |   16.63983   46.59182     0.36   0.721    -74.92921    10
+> 8.2089
+ _Iyear_1995 |   2.686061    47.4771     0.06   0.955    -90.62284    95
+> .99496
+ _Iyear_1996 |  -13.15455   51.06228    -0.26   0.797    -113.5096    87
+> .20048
+ _Iyear_1997 |  -31.21437   57.90757    -0.54   0.590    -145.0227    82
+> .59401
+ _Iyear_1998 |  -51.01194    68.1056    -0.75   0.454     -184.863     8
+> 2.8391
+ _Iyear_1999 |  -73.60391   81.29894    -0.91   0.366    -233.3844     8
+> 6.1766
+       _cons |  -58.51335   35.22931    -1.66   0.097    -127.7511    10
+> .72442
+------------------------------------------------------------------------
+> ------
+
+. reg Dyall irca `AllAll' `tdums' , cluster(statenum) ;
+note: all0 omitted because of collinearity
+note: all0Xt omitted because of collinearity
+note: all0Xt2 omitted because of collinearity
+note: all02 omitted because of collinearity
+note: all02Xt omitted because of collinearity
+note: all02Xt2 omitted because of collinearity
+note: Dall0 omitted because of collinearity
+note: Dall0Xt omitted because of collinearity
+note: Dall0Xt2 omitted because of collinearity
+note: Dall02 omitted because of collinearity
+note: Dall02Xt omitted because of collinearity
+note: Dall02Xt2 omitted because of collinearity
+note: DpovrateXt omitted because of collinearity
+note: DpovrateXt2 omitted because of collinearity
+note: Dpovrate2Xt omitted because of collinearity
+note: Dpovrate2Xt2 omitted because of collinearity
+note: DlpopXDpovrateXt omitted because of collinearity
+note: DlpopXDpovrateXt2 omitted because of collinearity
+note: DURXDpovrateXt omitted because of collinearity
+note: DURXDpovrateXt2 omitted because of collinearity
+note: DpovrateXDATWIXt omitted because of collinearity
+note: DpovrateXDATWIXt2 omitted because of collinearity
+note: DpovrateXDcrack_indexXt omitted because of collinearity
+note: DpovrateXDcrack_indexXt2 omitted because of collinearity
+note: DpovrateXDla14pcXt omitted because of collinearity
+note: DpovrateXDla14pcXt2 omitted because of collinearity
+note: DpovrateXDopcXt omitted because of collinearity
+note: DpovrateXDopcXt2 omitted because of collinearity
+note: DpovrateXDlogincomeXt omitted because of collinearity
+note: DpovrateXDlogincomeXt2 omitted because of collinearity
+note: DpovrateXDlogempXt omitted because of collinearity
+note: DpovrateXDlogempXt2 omitted because of collinearity
+
+Linear regression                               Number of obs     =     
+>  4,806
+                                                F(267, 442)       =     
+>      .
+                                                Prob > F          =     
+>      .
+                                                R-squared         =     
+> 0.1113
+                                                Root MSE          =     
+> .62837
+
+                             (Std. Err. adjusted for 443 clusters in sta
+> tenum)
+------------------------------------------------------------------------
+> ------
+             |               Robust
+       Dyall |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Int
+> erval]
+-------------+----------------------------------------------------------
+> ------
+        irca |  -3.850561    18.4964    -0.21   0.835    -40.20238    32
+> .50126
+        all0 |          0  (omitted)
+      all0Xt |          0  (omitted)
+     all0Xt2 |          0  (omitted)
+       all02 |          0  (omitted)
+     all02Xt |          0  (omitted)
+    all02Xt2 |          0  (omitted)
+       Dall0 |          0  (omitted)
+     Dall0Xt |          0  (omitted)
+    Dall0Xt2 |          0  (omitted)
+      Dall02 |          0  (omitted)
+    Dall02Xt |          0  (omitted)
+   Dall02Xt2 |          0  (omitted)
+       Dlpop |   3.735497   4.013484     0.93   0.352    -4.152387    11
+> .62338
+         DUR |   .1749624   .0931564     1.88   0.061     -.008122    .3
+> 580468
+    Dpovrate |  -.0326331   .0369116    -0.88   0.377    -.1051771     .
+> 039911
+       DATWI |  -280.1397    931.375    -0.30   0.764    -2110.613    15
+> 50.334
+Dcrack_index |   .4034483   .5397177     0.75   0.455    -.6572835     1
+> .46418
+     Dla14pc |   550.6245   1158.861     0.48   0.635    -1726.937    28
+> 28.186
+        Dopc |   119.4565   200.3239     0.60   0.551    -274.2493    51
+> 3.1623
+  Dlogincome |  -.4328325    1.32954    -0.33   0.745    -3.045838    2.
+> 180173
+     Dlogemp |  -.9458936   2.193892    -0.43   0.667    -5.257651    3.
+> 365863
+      Dlpop2 |  -9.224205    49.6779    -0.19   0.853    -106.8585    88
+> .41004
+        DUR2 |  -.0370271   .0194219    -1.91   0.057    -.0751977    .0
+> 011436
+   Dpovrate2 |  -.0038612   .0033849    -1.14   0.255    -.0105137    .0
+> 027913
+      DATWI2 |   -1135053   484988.5    -2.34   0.020     -2088223   -18
+> 1883.3
+Dcrack_in~x2 |  -.2354924   .2611442    -0.90   0.368     -.748731    .2
+> 777462
+    Dla14pc2 |   785344.8   902692.4     0.87   0.385    -988757.7     2
+> 559447
+       Dopc2 |   22079.93   17935.39     1.23   0.219     -13169.3    57
+> 329.17
+ Dlogincome2 |  -1.440992   2.679094    -0.54   0.591    -6.706337    3.
+> 824354
+    Dlogemp2 |  -5.565304   27.64455    -0.20   0.841     -59.8964    48
+> .76579
+   DlpopXDUR |  -1.048634   1.889853    -0.55   0.579    -4.762848     2
+> .66558
+DlpopXDpov~e |  -.3216054   .7231261    -0.44   0.657    -1.742798    1.
+> 099587
+ DlpopXDATWI |  -20791.88   16036.66    -1.30   0.195    -52309.46     1
+> 0725.7
+DlpopXDcra~x |  -9.148945   7.398199    -1.24   0.217    -23.68896    5.
+> 391073
+DlpopXDla1~c |  -15154.96    25050.6    -0.60   0.546    -64388.05    34
+> 078.13
+  DlpopXDopc |  -2110.679   4215.014    -0.50   0.617    -10394.64    61
+> 73.279
+DlpopXDlog~e |  -.9020328   24.27736    -0.04   0.970    -48.61543    46
+> .81137
+DlpopXDlog~p |  -54.13277   52.05876    -1.04   0.299    -156.4462    48
+> .18068
+DURXDpovrate |   .0045638   .0110912     0.41   0.681    -.0172342    .0
+> 263618
+   DURXDATWI |  -999.0398     333.58    -2.99   0.003     -1654.64   -34
+> 3.4399
+DURXDcrack~x |   .5910033     .14754     4.01   0.000     .3010362    .8
+> 809703
+ DURXDla14pc |  -665.1981   354.6882    -1.88   0.061    -1362.283    31
+> .88685
+    DURXDopc |  -37.21211   86.36624    -0.43   0.667    -206.9516    13
+> 2.5274
+DURXDlogin~e |   .2285116   .6231123     0.37   0.714    -.9961193    1.
+> 453143
+ DURXDlogemp |   .4277121   1.064229     0.40   0.688    -1.663865    2.
+> 519289
+DpovrateXD~I |   126.0901   280.6703     0.45   0.653    -425.5241    67
+> 7.7042
+DpovrateXD~x |   .1509448   .0569233     2.65   0.008     .0390709    .2
+> 628188
+Dpovrate~4pc |  -100.4868   44.01156    -2.28   0.023    -186.9848    -1
+> 3.9889
+Dpovrate~opc |  -53.44346   26.46146    -2.02   0.044    -105.4494   -1.
+> 437542
+DpovrateXD~e |  -.3194599   .2560675    -1.25   0.213    -.8227211    .1
+> 838013
+DpovrateXD~p |   .6135425   .2655269     2.31   0.021     .0916903    1.
+> 135395
+DATWIXDcra~x |   1166.463   1206.916     0.97   0.334    -1205.543    35
+> 38.469
+DATWIXDla1~c |   -9294175    5621282    -1.65   0.099    -2.03e+07     1
+> 753587
+  DATWIXDopc |  -291745.9   443768.2    -0.66   0.511     -1163904    58
+> 0411.9
+DATWIXDlog~e |  -5498.003    6226.78    -0.88   0.378    -17735.78    67
+> 39.773
+DATWIXDlog~p |  -4751.761   9538.012    -0.50   0.619    -23497.25    13
+> 993.73
+Dcrack_i~4pc |   1034.542   952.0262     1.09   0.278    -836.5183    29
+> 05.603
+Dcrack_i~opc |  -431.0691   570.7039    -0.76   0.450      -1552.7    69
+> 0.5614
+Dcrack_ind~e |  -.3878272     3.4905    -0.11   0.912    -7.247866    6.
+> 472211
+Dcrack_ind~p |   .3940675   5.395135     0.07   0.942    -10.20924    10
+> .99737
+Dla14pcXDopc |   236625.4   978919.5     0.24   0.809     -1687290     2
+> 160541
+Dla14pcXDl~e |  -17437.97   9563.496    -1.82   0.069    -36233.54    13
+> 57.607
+Dla14pcXDl~p |  -17252.08   12074.78    -1.43   0.154     -40983.2    64
+> 79.036
+DopcXDlogi~e |  -2283.753   1265.625    -1.80   0.072    -4771.143    20
+> 3.6364
+DopcXDlogemp |   -807.999   2605.022    -0.31   0.757    -5927.768     4
+> 311.77
+Dlogincome~p |   2.924191   13.03131     0.22   0.823    -22.68684    28
+> .53523
+       Llpop |  -2.701947   8.957715    -0.30   0.763    -20.30695    14
+> .90306
+         LUR |   .6609977   .2040226     3.24   0.001     .2600228    1.
+> 061973
+    Lpovrate |   .6164337   .9102504     0.68   0.499    -1.172523     2
+> .40539
+       LATWI |  -684.9152   446.5233    -1.53   0.126    -1562.488    19
+> 2.6574
+Lcrack_index |    .381835   .2635823     1.45   0.148    -.1361954    .8
+> 998653
+     Lla14pc |   731.1324   785.5364     0.93   0.352     -812.718    22
+> 74.983
+        Lopc |   95.31735   108.7671     0.88   0.381    -118.4476    30
+> 9.0823
+  Llogincome |  -22.21217   11.74494    -1.89   0.059    -45.29503    .8
+> 706872
+     Llogemp |  -5.316928    5.40172    -0.98   0.326    -15.93318    5.
+> 299319
+      Llpop2 |   .0263351   .4541506     0.06   0.954    -.8662279     .
+> 918898
+        LUR2 |  -.0332291   .0123885    -2.68   0.008    -.0575768   -.0
+> 088813
+   Lpovrate2 |  -.0242969   .0205357    -1.18   0.237    -.0646567    .0
+> 160629
+      LATWI2 |   12056.97   6823.351     1.77   0.078    -1353.277    25
+> 467.21
+Lcrack_in~x2 |    .307156   .1429454     2.15   0.032     .0262189     .
+> 588093
+    Lla14pc2 |  -146712.5   71671.75    -2.05   0.041    -287572.3   -58
+> 52.764
+       Lopc2 |  -9426.187   3945.855    -2.39   0.017    -17181.15   -16
+> 71.219
+ Llogincome2 |   1.129135   .6582317     1.72   0.087    -.1645178    2.
+> 422788
+    Llogemp2 |    .279776   .2990688     0.94   0.350    -.3079976    .8
+> 675495
+       Mlpop |  -4.405551   3.503112    -1.26   0.209    -11.29038    2.
+> 479275
+         MUR |  -.5531314   .2054768    -2.69   0.007    -.9569644   -.1
+> 492985
+    Mpovrate |   .0390884   .0884614     0.44   0.659    -.1347689    .2
+> 129457
+       MATWI |   577.0802   269.4665     2.14   0.033     47.48552    11
+> 06.675
+Mcrack_index |   .6879821   .3364329     2.04   0.041     .0267751    1.
+> 349189
+     Mla14pc |  -337.5325   154.5372    -2.18   0.029    -641.2515   -33
+> .81341
+        Mopc |   88.07759   91.24433     0.97   0.335    -91.24906    26
+> 7.4042
+  Mlogincome |   16.08174   9.857605     1.63   0.104    -3.291857    35
+> .45535
+     Mlogemp |    1.12881   2.243837     0.50   0.615    -3.281106    5.
+> 538726
+      Mlpop2 |   .2385044   .1787677     1.33   0.183    -.1128358    .5
+> 898447
+        MUR2 |   .0367368   .0135218     2.72   0.007     .0101617    .0
+> 633118
+   Mpovrate2 |  -.0005361   .0018214    -0.29   0.769    -.0041158    .0
+> 030435
+      MATWI2 |  -11220.69   6682.157    -1.68   0.094    -24353.44    19
+> 12.056
+Mcrack_in~x2 |  -.2612244   .1848973    -1.41   0.158    -.6246115    .1
+> 021626
+    Mla14pc2 |   58234.02   30606.09     1.90   0.058    -1917.522    11
+> 8385.6
+       Mopc2 |  -19389.92   8255.488    -2.35   0.019    -35614.81   -31
+> 65.035
+ Mlogincome2 |  -.8283651   .5208463    -1.59   0.112    -1.852008    .1
+> 952779
+    Mlogemp2 |  -.0818202   .1172588    -0.70   0.486    -.3122743    .1
+> 486338
+       lpop0 |   8.266564   9.635762     0.86   0.391    -10.67104    27
+> .20417
+         UR0 |   -.364763   .2099145    -1.74   0.083    -.7773175    .0
+> 477915
+    povrate0 |  -.6797697   .9084647    -0.75   0.455    -2.465217    1.
+> 105677
+       ATWI0 |    147.166   469.5032     0.31   0.754      -775.57    10
+> 69.902
+crack_index0 |    .107203   .3253663     0.33   0.742    -.5322542    .7
+> 466602
+     la14pc0 |  -1818.858   2937.503    -0.62   0.536    -7592.067     3
+> 954.35
+        opc0 |  -261.2121   142.3633    -1.83   0.067    -541.0051    18
+> .58091
+  logincome0 |   15.29307   14.09895     1.08   0.279    -12.41623    43
+> .00237
+     logemp0 |   3.249383   4.937623     0.66   0.511    -6.454752    12
+> .95352
+      Dlpop0 |    1.55766    2.25788     0.69   0.491    -2.879855    5.
+> 995174
+        DUR0 |  -.0615048   .0630377    -0.98   0.330    -.1853957    .0
+> 623862
+   Dpovrate0 |  -3.739986   2.397213    -1.56   0.119    -8.451338    .9
+> 713666
+      DATWI0 |   790.4734    914.597     0.86   0.388    -1007.026    25
+> 87.973
+Dcrack_ind~0 |   .0373987   .2299484     0.16   0.871    -.4145294    .4
+> 893267
+    Dla14pc0 |  -983.6721    1099.65    -0.89   0.372    -3144.864    11
+> 77.519
+       Dopc0 |   61.85527    94.8167     0.65   0.515    -124.4923    24
+> 8.2029
+ Dlogincome0 |   1.112601   .7134525     1.56   0.120    -.2895792    2.
+> 514782
+    Dlogemp0 |  -.1419673   1.109119    -0.13   0.898     -2.32177    2.
+> 037836
+      lpop02 |  -.3334412   .4909312    -0.68   0.497    -1.298291    .6
+> 314083
+        UR02 |   .0165652   .0135602     1.22   0.223    -.0100852    .0
+> 432156
+   povrate02 |   .0251849   .0205344     1.23   0.221    -.0151723    .0
+> 655421
+      ATWI02 |  -2665.653   4986.476    -0.53   0.593     -12465.8    71
+> 34.496
+crack_ind~02 |   .5530665   .4504074     1.23   0.220    -.3321397    1.
+> 438273
+    la14pc02 |   349311.2    1033952     0.34   0.736     -1682763     2
+> 381385
+       opc02 |   44619.88   14785.94     3.02   0.003      15560.4    73
+> 679.37
+ logincome02 |  -.7900769   .7854602    -1.01   0.315    -2.333778    .7
+> 536239
+    logemp02 |  -.1367834   .2707413    -0.51   0.614    -.6688837    .3
+> 953169
+     DlpopXt |  -15.25667   13.73825    -1.11   0.267    -42.25708    11
+> .74373
+    DlpopXt2 |   8.224864   9.209992     0.89   0.372    -9.875952    26
+> .32568
+       DURXt |  -.5159732   .2659362    -1.94   0.053     -1.03863    .0
+> 066832
+      DURXt2 |   .2861544   .1601937     1.79   0.075    -.0286816    .6
+> 009903
+  DpovrateXt |          0  (omitted)
+ DpovrateXt2 |          0  (omitted)
+     DATWIXt |  -3745.389   4172.045    -0.90   0.370     -11944.9    44
+> 54.121
+    DATWIXt2 |   6105.405   4046.412     1.51   0.132    -1847.193      
+>  14058
+Dcrack_i~xXt |  -.6078438   1.330331    -0.46   0.648    -3.222404    2.
+> 006716
+Dcrack_~xXt2 |    .102364   .7264329     0.14   0.888    -1.325328    1.
+> 530056
+   Dla14pcXt |  -814.8967   2876.574    -0.28   0.777     -6468.36    48
+> 38.566
+  Dla14pcXt2 |   118.9376   1612.441     0.07   0.941    -3050.066    32
+> 87.941
+      DopcXt |  -807.6948   714.8164    -1.13   0.259    -2212.556    59
+> 7.1665
+     DopcXt2 |   720.4391   507.9236     1.42   0.157    -277.8063    17
+> 18.685
+DlogincomeXt |   3.843746    3.93126     0.98   0.329    -3.882537    11
+> .57003
+Dloginc~eXt2 |  -2.664203    2.46644    -1.08   0.281    -7.511609    2.
+> 183204
+   DlogempXt |   3.288404   6.795449     0.48   0.629      -10.067    16
+> .64381
+  DlogempXt2 |  -2.069282   4.502956    -0.46   0.646    -10.91915    6.
+> 780582
+    Dlpop2Xt |   33.12814    205.227     0.16   0.872    -370.2139    43
+> 6.4702
+   Dlpop2Xt2 |  -8.858495   154.8446    -0.06   0.954    -313.1817    29
+> 5.4647
+      DUR2Xt |   .0806597   .0502919     1.60   0.109    -.0181812    .1
+> 795007
+     DUR2Xt2 |  -.0401357   .0329842    -1.22   0.224    -.1049611    .0
+> 246896
+ Dpovrate2Xt |          0  (omitted)
+Dpovrate2Xt2 |          0  (omitted)
+    DATWI2Xt |    5285067    2301135     2.30   0.022     762541.1     9
+> 807594
+   DATWI2Xt2 |   -4109576    1870872    -2.20   0.029     -7786485     -
+> 432666
+Dcrack_i~2Xt |   .9249295   .7843335     1.18   0.239    -.6165568    2.
+> 466416
+Dcrack_~2Xt2 |  -.5245129   .4657371    -1.13   0.261    -1.439847    .3
+> 908214
+  Dla14pc2Xt |   -2284041    2391874    -0.95   0.340     -6984901     2
+> 416819
+ Dla14pc2Xt2 |    1591858    1463309     1.09   0.277     -1284050     4
+> 467765
+     Dopc2Xt |  -58019.54   62059.07    -0.93   0.350    -179987.1    63
+> 947.98
+    Dopc2Xt2 |   12971.77   45485.96     0.29   0.776    -76423.86    10
+> 2367.4
+Dloginco~2Xt |   2.693349   10.32903     0.26   0.794    -17.60677    22
+> .99347
+Dloginc~2Xt2 |  -.6180541   7.660213    -0.08   0.936    -15.67302    14
+> .43691
+  Dlogemp2Xt |  -12.16454   81.18613    -0.15   0.881    -171.7233    14
+> 7.3943
+ Dlogemp2Xt2 |  -2.298424   58.61235    -0.04   0.969    -117.4919    11
+> 2.8951
+ DlpopXDURXt |  -2.972355   6.617302    -0.45   0.654    -15.97764    10
+> .03293
+DlpopXDURXt2 |   5.225404   4.863471     1.07   0.283    -4.332996     1
+> 4.7838
+DlpopXDpov~t |          0  (omitted)
+DlpopXDpov~2 |          0  (omitted)
+DlpopXDATW~t |   62527.78   78799.43     0.79   0.428    -92340.34    21
+> 7395.9
+DlpopXDATW~2 |  -64839.76   75755.74    -0.86   0.393      -213726    84
+> 046.46
+DlpopXDcra~t |   34.72742   22.30682     1.56   0.120    -9.113181    78
+> .56803
+DlpopXDcra~2 |  -22.22062   15.09263    -1.47   0.142    -51.88284    7.
+> 441612
+DlpopXDla1~t |   33841.31   64747.54     0.52   0.601    -93409.98    16
+> 1092.6
+DlpopXDla1~2 |  -17504.23   38803.89    -0.45   0.652    -93767.27    58
+> 758.82
+DlpopXDopcXt |   15527.44   15595.99     1.00   0.320    -15124.06    46
+> 178.94
+DlpopXDopc~2 |   1150.292   12578.63     0.09   0.927    -23571.06    25
+> 871.64
+DlpopXDl~eXt |   44.02004   101.2479     0.43   0.664    -154.9671    24
+> 3.0072
+DlpopX~meXt2 |  -6.870879   74.32508    -0.09   0.926    -152.9454    13
+> 9.2036
+DlpopXDl~pXt |   163.6255   174.8846     0.94   0.350    -180.0832    50
+> 7.3343
+DlpopXD~pXt2 |  -115.0849   131.2221    -0.88   0.381    -372.9816    14
+> 2.8118
+DURXDpovra~t |          0  (omitted)
+DURXDpovra~2 |          0  (omitted)
+ DURXDATWIXt |   3872.788   1371.317     2.82   0.005     1177.676    65
+> 67.899
+DURXDATWIXt2 |  -2980.742   1114.007    -2.68   0.008     -5170.15   -79
+> 1.3331
+DURXDcrack~t |  -1.447132    .446059    -3.24   0.001    -2.323792   -.5
+> 704723
+DURXDcrack~2 |   .7990055   .2773064     2.88   0.004     .2540026    1.
+> 344008
+DURXDla14p~t |   1510.476   908.2452     1.66   0.097    -274.5392    32
+> 95.492
+DURXDla14p~2 |  -757.9488   562.3554    -1.35   0.178    -1863.172    34
+> 7.2739
+  DURXDopcXt |   141.4936   347.2755     0.41   0.684    -541.0228      
+> 824.01
+ DURXDopcXt2 |  -54.74085   221.8679    -0.25   0.805    -490.7879    38
+> 1.3062
+DURXDlogin~t |  -1.596846   2.179676    -0.73   0.464    -5.880663     2
+> .68697
+DURXDlogin~2 |   1.339004   1.386003     0.97   0.335     -1.38497    4.
+> 062979
+DURXDlogem~t |   .3092249   4.001732     0.08   0.938    -7.555562    8.
+> 174012
+DURXDlogem~2 |  -2.108937   2.809446    -0.75   0.453    -7.630468    3.
+> 412595
+Dpovrate~IXt |          0  (omitted)
+Dpovrat~IXt2 |          0  (omitted)
+Dpovrate~xXt |          0  (omitted)
+Dpovrat~xXt2 |          0  (omitted)
+Dpovra~4pcXt |          0  (omitted)
+Dpovr~4pcXt2 |          0  (omitted)
+Dpovra~opcXt |          0  (omitted)
+Dpovr~opcXt2 |          0  (omitted)
+Dpovrate~eXt |          0  (omitted)
+Dpovra~meXt2 |          0  (omitted)
+Dpovrate~pXt |          0  (omitted)
+Dpovrat~pXt2 |          0  (omitted)
+DATWIXDcra~t |  -1092.063   3666.088    -0.30   0.766    -8297.192    61
+> 13.066
+DATWIXDcra~2 |  -1931.626   3311.777    -0.58   0.560    -8440.413     4
+> 577.16
+DATWIXDla1~t |   2.93e+07   1.64e+07     1.79   0.074     -2837114    6.
+> 15e+07
+DATWIXDla1~2 |  -2.21e+07   1.17e+07    -1.89   0.059    -4.50e+07    82
+> 8785.9
+DATWIXDopcXt |    3297882    4134651     0.80   0.426     -4828136    1.
+> 14e+07
+DATWIXDopc~2 |   -3840122    3693817    -1.04   0.299    -1.11e+07     3
+> 419504
+DATWIXDl~eXt |      63756   43693.34     1.46   0.145    -22116.51    14
+> 9628.5
+DATWIXD~eXt2 |  -67685.53   46811.82    -1.45   0.149    -159686.9    24
+> 315.88
+DATWIXDl~pXt |   15332.51   54392.59     0.28   0.778    -91567.73    12
+> 2232.8
+DATWIXD~pXt2 |  -5413.851   46518.91    -0.12   0.907    -96839.58    86
+> 011.88
+Dcrack~4pcXt |  -2574.247   2419.798    -1.06   0.288    -7329.985    21
+> 81.492
+Dcrac~4pcXt2 |   1217.451   1368.926     0.89   0.374    -1472.962    39
+> 07.864
+Dcrack~opcXt |   1811.413   1949.714     0.93   0.353    -2020.448    56
+> 43.274
+Dcrac~opcXt2 |  -1432.477   1482.275    -0.97   0.334     -4345.66    14
+> 80.706
+Dcrack_i~eXt |  -3.446202   10.32071    -0.33   0.739    -23.72996    16
+> .83755
+Dcrack_~eXt2 |   4.587814    6.60333     0.69   0.488    -8.390011    17
+> .56564
+Dcrack_i~pXt |  -2.752714   15.17115    -0.18   0.856    -32.56927    27
+> .06384
+Dcrack_~pXt2 |    .343386   10.01571     0.03   0.973    -19.34094    20
+> .02771
+Dla14pcXDo~t |  -343414.8    2598289    -0.13   0.895     -5449951     4
+> 763122
+Dla14pcXDo~2 |   88775.36    1625102     0.05   0.956     -3105112     3
+> 282662
+Dla14pcX~eXt |   40576.81   23147.75     1.75   0.080    -4916.521    86
+> 070.14
+Dla14pc~eXt2 |  -22783.48   12878.35    -1.77   0.078     -48093.9     2
+> 526.94
+Dla14pcX~pXt |   38092.62   31010.03     1.23   0.220    -22852.81    99
+> 038.05
+Dla14pc~pXt2 |  -18474.89   19319.13    -0.96   0.339    -56443.67    19
+> 493.88
+DopcXDlogi~t |   10852.55   5361.668     2.02   0.044     315.0211    21
+> 390.08
+DopcXDlogi~2 |  -10087.19   4321.064    -2.33   0.020    -18579.58   -15
+> 94.806
+DopcXDloge~t |   8239.829   10594.07     0.78   0.437    -12581.18    29
+> 060.84
+DopcXDloge~2 |  -12443.28   10346.16    -1.20   0.230    -32777.06    78
+> 90.501
+Dloginco~pXt |  -10.85074   48.87877    -0.22   0.824    -106.9144    85
+> .21292
+Dloginc~pXt2 |   22.29134   37.09897     0.60   0.548    -50.62095    95
+> .20364
+     LlpopXt |  -11.56838   17.34994    -0.67   0.505    -45.66701    22
+> .53024
+    LlpopXt2 |   5.962391    9.60425     0.62   0.535    -12.91328    24
+> .83806
+       LURXt |  -.9653051    .551433    -1.75   0.081    -2.049062    .1
+> 184513
+      LURXt2 |   .2373578   .3313083     0.72   0.474    -.4137776    .8
+> 884931
+  LpovrateXt |  -1.131493   1.494508    -0.76   0.449    -4.068716    1.
+> 805731
+ LpovrateXt2 |   .5131023   .6128454     0.84   0.403    -.6913506    1.
+> 717555
+     LATWIXt |    1160.13   697.3892     1.66   0.097    -210.4812     2
+> 530.74
+    LATWIXt2 |  -708.9793   522.1502    -1.36   0.175    -1735.185    31
+> 7.2263
+Lcrack_i~xXt |  -.6561271    .939073    -0.70   0.485     -2.50173    1.
+> 189476
+Lcrack_~xXt2 |   .3901156   .6015919     0.65   0.517    -.7922204    1.
+> 572451
+   Lla14pcXt |  -1627.604   1799.071    -0.90   0.366      -5163.4    19
+> 08.193
+  Lla14pcXt2 |   774.2661   975.3117     0.79   0.428    -1142.558    26
+> 91.091
+      LopcXt |  -277.0195   321.0001    -0.86   0.389    -907.8957    35
+> 3.8567
+     LopcXt2 |   107.7568   206.0999     0.52   0.601    -297.3007    51
+> 2.8143
+LlogincomeXt |   30.75691   23.09763     1.33   0.184    -14.63791    76
+> .15173
+Lloginc~eXt2 |  -34.61535   18.61996    -1.86   0.064    -71.21002    1.
+> 979313
+   LlogempXt |   18.78205   11.79559     1.59   0.112    -4.400359    41
+> .96445
+  LlogempXt2 |  -5.959784   6.871526    -0.87   0.386    -19.46471     7
+> .54514
+    Llpop2Xt |   .8389808   .8645286     0.97   0.332    -.8601166    2.
+> 538078
+   Llpop2Xt2 |  -.4144942   .4860061    -0.85   0.394    -1.369664    .5
+> 406757
+      LUR2Xt |   .0441866   .0360835     1.22   0.221      -.02673    .1
+> 151032
+     LUR2Xt2 |  -.0074063   .0219603    -0.34   0.736    -.0505659    .0
+> 357533
+ Lpovrate2Xt |   .0428428    .033279     1.29   0.199    -.0225618    .1
+> 082475
+Lpovrate2Xt2 |  -.0187966   .0133585    -1.41   0.160    -.0450508    .0
+> 074575
+    LATWI2Xt |  -22093.06   10073.51    -2.19   0.029    -41890.98   -22
+> 95.142
+   LATWI2Xt2 |   13128.26   9588.403     1.37   0.172    -5716.267    31
+> 972.79
+Lcrack_i~2Xt |  -.6351344   .3779347    -1.68   0.094    -1.377907    .1
+> 076379
+Lcrack_~2Xt2 |   .2319564   .2169065     1.07   0.285    -.1943398    .6
+> 582527
+  Lla14pc2Xt |     312116   166103.6     1.88   0.061    -14334.97    63
+> 8567.1
+ Lla14pc2Xt2 |  -148117.7   88673.92    -1.67   0.096    -322392.6    26
+> 157.18
+     Lopc2Xt |   16790.16   15163.24     1.11   0.269    -13010.84    46
+> 591.16
+    Lopc2Xt2 |  -6333.413   11060.81    -0.57   0.567    -28071.73    15
+> 404.91
+Lloginco~2Xt |  -1.362479   1.243561    -1.10   0.274    -3.806506    1.
+> 081547
+Lloginc~2Xt2 |   1.587401   .9439039     1.68   0.093    -.2676961    3.
+> 442499
+  Llogemp2Xt |  -1.118021   .6362707    -1.76   0.080    -2.368513    .1
+> 324706
+ Llogemp2Xt2 |    .416173   .3568212     1.17   0.244     -.285104     1
+> .11745
+     MlpopXt |   19.95379   18.83846     1.06   0.290     -17.0703    56
+> .97787
+    MlpopXt2 |  -5.697183   16.35027    -0.35   0.728    -37.83111    26
+> .43674
+       MURXt |   .8462743   .6806479     1.24   0.214     -.491434    2.
+> 183983
+      MURXt2 |  -.2648203   .5078919    -0.52   0.602    -1.263003    .7
+> 333627
+  MpovrateXt |  -.1219939   .3456933    -0.35   0.724    -.8014007    .5
+> 574129
+ MpovrateXt2 |    .122338   .2926687     0.42   0.676    -.4528572    .6
+> 975333
+     MATWIXt |  -1472.476   1352.164    -1.09   0.277    -4129.945    11
+> 84.994
+    MATWIXt2 |   1182.915   1239.252     0.95   0.340    -1252.643    36
+> 18.472
+Mcrack_i~xXt |  -2.030807   1.167332    -1.74   0.083    -4.325018    .2
+> 634035
+Mcrack_~xXt2 |   1.407536   .8412326     1.67   0.095    -.2457763    3.
+> 060849
+   Mla14pcXt |   1301.124    612.038     2.13   0.034     98.25792     2
+> 503.99
+  Mla14pcXt2 |  -1126.437   540.3979    -2.08   0.038    -2188.506   -64
+> .36816
+      MopcXt |  -270.5103   343.3532    -0.79   0.431     -945.318    40
+> 4.2975
+     MopcXt2 |   319.9678    254.841     1.26   0.210    -180.8828    82
+> 0.8185
+MlogincomeXt |  -38.00676   47.52876    -0.80   0.424    -131.4172    55
+> .40368
+Mloginc~eXt2 |   61.84877   42.60103     1.45   0.147    -21.87698    14
+> 5.5745
+   MlogempXt |   1.818167    10.9265     0.17   0.868    -19.65618    23
+> .29251
+  MlogempXt2 |  -10.27057   9.410764    -1.09   0.276    -28.76597    8.
+> 224838
+    Mlpop2Xt |  -1.048358   .9834039    -1.07   0.287    -2.981087    .8
+> 843703
+   Mlpop2Xt2 |   .2574494   .8513698     0.30   0.762    -1.415786    1.
+> 930685
+      MUR2Xt |  -.0543098   .0452771    -1.20   0.231    -.1432949    .0
+> 346753
+     MUR2Xt2 |   .0128925   .0341295     0.38   0.706    -.0541837    .0
+> 799687
+ Mpovrate2Xt |   .0019984   .0066518     0.30   0.764    -.0110747    .0
+> 150716
+Mpovrate2Xt2 |  -.0021028   .0051272    -0.41   0.682    -.0121794    .0
+> 079739
+    MATWI2Xt |   31840.44   22515.45     1.41   0.158     -12410.2    76
+> 091.09
+   MATWI2Xt2 |  -23274.58   20588.63    -1.13   0.259    -63738.36    17
+> 189.19
+Mcrack_i~2Xt |   .6020883   .6029215     1.00   0.319    -.5828608    1.
+> 787037
+Mcrack_~2Xt2 |  -.3537644   .4038501    -0.88   0.382    -1.147469    .4
+> 399406
+  Mla14pc2Xt |  -183982.9   114639.9    -1.60   0.109    -409289.9    41
+> 323.98
+ Mla14pc2Xt2 |   156667.9   95647.53     1.64   0.102    -31312.55    34
+> 4648.4
+     Mopc2Xt |    77144.6   31913.17     2.42   0.016      14424.2      
+> 139865
+    Mopc2Xt2 |  -62902.21   24649.28    -2.55   0.011    -111346.6   -14
+> 457.85
+Mloginco~2Xt |    1.86555   2.490141     0.75   0.454    -3.028437    6.
+> 759537
+Mloginc~2Xt2 |  -3.130948   2.230867    -1.40   0.161    -7.515373    1.
+> 253476
+  Mlogemp2Xt |   .0590239   .5706486     0.10   0.918    -1.062498    1.
+> 180546
+ Mlogemp2Xt2 |   .4473424   .4849284     0.92   0.357    -.5057094    1.
+> 400394
+     lpop0Xt |  -13.87844   25.14594    -0.55   0.581     -63.2989    35
+> .54201
+    lpop0Xt2 |   2.647398   15.95217     0.17   0.868    -28.70414    33
+> .99893
+       UR0Xt |   1.030439   .5770606     1.79   0.075    -.1036847    2.
+> 164562
+      UR0Xt2 |  -.7048832   .3430312    -2.05   0.040    -1.379058   -.0
+> 307082
+  povrate0Xt |   1.332298   1.487786     0.90   0.371    -1.591715    4.
+> 256311
+ povrate0Xt2 |  -.6876833   .6176363    -1.11   0.266    -1.901552    .5
+> 261855
+     ATWI0Xt |   156.1559   1278.808     0.12   0.903    -2357.143    26
+> 69.455
+    ATWI0Xt2 |  -358.9082   875.5998    -0.41   0.682    -2079.764    13
+> 61.948
+crack_in~0Xt |   .1579216   .8832712     0.18   0.858    -1.578012    1.
+> 893855
+crack_i~0Xt2 |  -.4662923   .5747975    -0.81   0.418    -1.595968    .6
+> 633835
+   la14pc0Xt |   4766.317   5523.934     0.86   0.389    -6090.123    15
+> 622.76
+  la14pc0Xt2 |  -2808.366   2607.971    -1.08   0.282    -7933.932    23
+> 17.199
+      opc0Xt |   812.5944   400.7225     2.03   0.043     25.03623    16
+> 00.153
+     opc0Xt2 |  -589.7834   261.6655    -2.25   0.025    -1104.046   -75
+> .52031
+logincome0Xt |  -12.38681   42.00062    -0.29   0.768    -94.93253    70
+> .15892
+loginco~0Xt2 |   -13.4006   28.31359    -0.47   0.636    -69.04659     4
+> 2.2454
+   logemp0Xt |  -17.01763   13.02549    -1.31   0.192    -42.61722    8.
+> 581953
+  logemp0Xt2 |   14.54495   8.308063     1.75   0.081    -1.783266    30
+> .87317
+    Dlpop0Xt |  -1.956206   7.426082    -0.26   0.792    -16.55102    12
+> .63861
+   Dlpop0Xt2 |   .1838319   5.110704     0.04   0.971    -9.860468    10
+> .22813
+      DUR0Xt |   .2086385   .1679176     1.24   0.215    -.1213776    .5
+> 386545
+     DUR0Xt2 |  -.1533004   .1049416    -1.46   0.145    -.3595469    .0
+> 529461
+ Dpovrate0Xt |    6.17279    4.13179     1.49   0.136    -1.947605    14
+> .29318
+Dpovrate0Xt2 |  -2.427495   1.750914    -1.39   0.166    -5.868647    1.
+> 013657
+    DATWI0Xt |  -1314.087   2901.506    -0.45   0.651    -7016.549    43
+> 88.375
+   DATWI0Xt2 |   702.4575   2064.355     0.34   0.734    -3354.714    47
+> 59.629
+Dcrack_i~0Xt |   .4964517    .650426     0.76   0.446    -.7818601    1.
+> 774764
+Dcrack_~0Xt2 |  -.4890092   .4174236    -1.17   0.242    -1.309391    .3
+> 313724
+  Dla14pc0Xt |   3161.375    2630.42     1.20   0.230    -2008.309    83
+> 31.058
+ Dla14pc0Xt2 |  -2312.626   1511.301    -1.53   0.127    -5282.854    65
+> 7.6032
+     Dopc0Xt |  -115.8452   223.5869    -0.52   0.605    -555.2707    32
+> 3.5803
+    Dopc0Xt2 |   21.83212   119.3794     0.18   0.855    -212.7897    25
+> 6.4539
+Dloginco~0Xt |  -2.937276   2.049996    -1.43   0.153    -6.966227    1.
+> 091674
+Dloginc~0Xt2 |   1.006559   1.341013     0.75   0.453    -1.628995    3.
+> 642113
+  Dlogemp0Xt |   1.999876   3.602718     0.56   0.579    -5.080711    9.
+> 080462
+ Dlogemp0Xt2 |  -2.061357   2.564349    -0.80   0.422    -7.101188    2.
+> 978474
+    lpop02Xt |   .5459894   1.270675     0.43   0.668    -1.951326    3.
+> 043305
+   lpop02Xt2 |  -.0318239   .8008745    -0.04   0.968    -1.605819    1.
+> 542171
+      UR02Xt |  -.0497312   .0363612    -1.37   0.172    -.1211936    .0
+> 217312
+     UR02Xt2 |   .0365816   .0208282     1.76   0.080    -.0043529    .0
+> 775161
+ povrate02Xt |   -.045773    .033424    -1.37   0.172    -.1114627    .0
+> 199167
+povrate02Xt2 |   .0214816   .0138574     1.55   0.122     -.005753    .0
+> 487162
+    ATWI02Xt |  -2378.551   15588.62    -0.15   0.879    -33015.57    28
+> 258.47
+   ATWI02Xt2 |   5424.094    11338.2     0.48   0.633    -16859.38    27
+> 707.57
+crack_in~2Xt |  -3.016937   1.189503    -2.54   0.012    -5.354721   -.6
+> 791532
+crack_i~2Xt2 |    2.72412   .7375903     3.69   0.000       1.2745     4
+> .17374
+  la14pc02Xt |   -1008334    1970920    -0.51   0.609     -4881872     2
+> 865204
+ la14pc02Xt2 |   594233.2   932251.8     0.64   0.524     -1237964     2
+> 426430
+     opc02Xt |  -142437.2   48643.96    -2.93   0.004    -238039.4   -46
+> 834.96
+    opc02Xt2 |   101703.8   36580.23     2.78   0.006     29811.01    17
+> 3596.6
+logincom~2Xt |   .5790115   2.336803     0.25   0.804    -4.013614    5.
+> 171637
+loginco~2Xt2 |   .7739961   1.570943     0.49   0.622    -2.313449    3.
+> 861441
+  logemp02Xt |   .8031509   .7045324     1.14   0.255    -.5814987      
+> 2.1878
+ logemp02Xt2 |  -.7274093   .4431954    -1.64   0.101    -1.598441    .1
+> 436229
+ _Iyear_1982 |   6.330781   10.97398     0.58   0.564    -15.23687    27
+> .89844
+ _Iyear_1983 |   11.96456   20.33088     0.59   0.557    -27.99265    51
+> .92177
+ _Iyear_1984 |   17.16702   28.17286     0.61   0.543    -38.20237    72
+> .53642
+ _Iyear_1985 |   20.75214   34.38663     0.60   0.546    -46.82947    88
+> .33376
+ _Iyear_1986 |   23.45128   39.08688     0.60   0.549    -53.36794    10
+> 0.2705
+ _Iyear_1987 |   25.58346   42.28295     0.61   0.545    -57.51715    10
+> 8.6841
+ _Iyear_1988 |   26.81272   44.03091     0.61   0.543    -59.72325    11
+> 3.3487
+ _Iyear_1989 |   27.25547   44.36938     0.61   0.539    -59.94569    11
+> 4.4566
+ _Iyear_1990 |   26.78137   43.43557     0.62   0.538    -58.58454    11
+> 2.1473
+ _Iyear_1991 |   25.36826   41.41782     0.61   0.541    -56.03206    10
+> 6.7686
+ _Iyear_1992 |   22.85632    38.6636     0.59   0.555    -53.13102    98
+> .84366
+ _Iyear_1993 |   19.49348   35.78329     0.54   0.586    -50.83306    89
+> .82002
+ _Iyear_1994 |   15.87246   33.77052     0.47   0.639    -50.49828    82
+> .24319
+ _Iyear_1995 |   10.60327   34.10068     0.31   0.756    -56.41635    77
+> .62288
+ _Iyear_1996 |   4.744694   38.09383     0.12   0.901    -70.12285    79
+> .61224
+ _Iyear_1997 |  -1.815546   46.06162    -0.04   0.969    -92.34254    88
+> .71145
+ _Iyear_1998 |  -9.218739   57.53168    -0.16   0.873    -122.2884    10
+> 3.8509
+ _Iyear_1999 |  -17.85885   71.87496    -0.25   0.804     -159.118    12
+> 3.4003
+       _cons |  -35.73433   29.27386    -1.22   0.223    -93.26759    21
+> .79893
+------------------------------------------------------------------------
+> ------
+
+. * Using selection method ;
+. * Violence Outcome ;
+. lassoShooting Dyviol `AllViol' , controls(`tdums') lasiter(100) verbos
+> e(0) fdisplay(0) ;
+
+. local yvSel `r(selected)' ;
+
+. di "`yvSel'" ;
+
+
+. * Violence IRCA ;
+. lassoShooting irca `AllViol' , controls(`tdums') lasiter(100) verbose(
+> 0) fdisplay(0) ;
+
+. local xvSel `r(selected)' ;
+
+. di "`xvSel'" ;
+Lla14pc LATWIXt2 MATWIXt2
+
+. * Get union of selected instruments ;
+. local vDS : list yvSel | xvSel ;
+
+. * Violence equation with selected controls ;
+. reg Dyviol irca `vDS' `tdums' , cluster(statenum) ;
+
+Linear regression                               Number of obs     =     
+> 41,664
+                                                F(22, 2686)       =     
+>  15.78
+                                                Prob > F          =     
+> 0.0000
+                                                R-squared         =     
+> 0.0043
+                                                Root MSE          =     
+> .69849
+
+                           (Std. Err. adjusted for 2,687 clusters in sta
+> tenum)
+------------------------------------------------------------------------
+> ------
+             |               Robust
+      Dyviol |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Int
+> erval]
+-------------+----------------------------------------------------------
+> ------
+        irca |  -1.091376   .6050546    -1.80   0.071    -2.277796    .0
+> 950441
+     Lla14pc |  -5.592192   1.197128    -4.67   0.000    -7.939577   -3.
+> 244808
+    LATWIXt2 |   .9490287   1.691179     0.56   0.575    -2.367116    4.
+> 265173
+    MATWIXt2 |  -.7287551   1.418654    -0.51   0.608    -3.510519    2.
+> 053009
+ _Iyear_1982 |  -.0881023   .0247101    -3.57   0.000     -.136555   -.0
+> 396495
+ _Iyear_1983 |   -.055287   .0215424    -2.57   0.010    -.0975285   -.0
+> 130456
+ _Iyear_1984 |  -.0476276    .021311    -2.23   0.026    -.0894151   -.0
+> 058401
+ _Iyear_1985 |  -.0147021   .0204021    -0.72   0.471    -.0547074    .0
+> 253033
+ _Iyear_1986 |  -.0510374   .0200429    -2.55   0.011    -.0903385   -.0
+> 117363
+ _Iyear_1987 |  -.0652154   .0202629    -3.22   0.001    -.1049478    -.
+> 025483
+ _Iyear_1988 |   .0013914   .0209379     0.07   0.947    -.0396646    .0
+> 424474
+ _Iyear_1989 |   .0486184   .0210119     2.31   0.021     .0074172    .0
+> 898196
+ _Iyear_1990 |   .0856016   .0212555     4.03   0.000     .0439227    .1
+> 272804
+ _Iyear_1991 |  -.0312748   .0207697    -1.51   0.132     -.072001    .0
+> 094514
+ _Iyear_1992 |  -.0066537   .0213183    -0.31   0.755    -.0484557    .0
+> 351482
+ _Iyear_1993 |   .0113376   .0217217     0.52   0.602    -.0312553    .0
+> 539305
+ _Iyear_1994 |   .0013375   .0217914     0.06   0.951    -.0413921    .0
+> 440672
+ _Iyear_1995 |   .0153914   .0222443     0.69   0.489    -.0282262     .
+> 059009
+ _Iyear_1996 |  -.0558215   .0226351    -2.47   0.014    -.1002054   -.0
+> 114376
+ _Iyear_1997 |  -.0317388   .0216239    -1.47   0.142    -.0741399    .0
+> 106624
+ _Iyear_1998 |  -.0211022   .0220114    -0.96   0.338    -.0642632    .0
+> 220588
+ _Iyear_1999 |  -.1198824   .0234902    -5.10   0.000    -.1659432   -.0
+> 738217
+       _cons |   .0856789   .0146095     5.86   0.000     .0570319    .1
+> 143258
+------------------------------------------------------------------------
+> ------
+
+. * Property Outcome ;
+. lassoShooting Dyprop `AllProp' , controls(`tdums') lasiter(100) verbos
+> e(0) fdisplay(0) ;
+
+. local ypSel `r(selected)' ;
+
+. di "`ypSel'" ;
+
+
+. * Property IRCA ;
+. lassoShooting irca `AllProp' , controls(`tdums') lasiter(100) verbose(
+> 0) fdisplay(0) ;
+
+. local xpSel `r(selected)' ;
+
+. di "`xpSel'" ;
+Lla14pc LATWIXt2 MATWIXt2
+
+. * Get union of selected instruments ;
+. local pDS : list ypSel | xpSel ;
+
+. * Property equation with selected controls ;
+. reg Dyprop irca `pDS' `tdums' , cluster(statenum) ;
+
+Linear regression                               Number of obs     =     
+> 41,664
+                                                F(22, 2686)       =     
+>  18.81
+                                                Prob > F          =     
+> 0.0000
+                                                R-squared         =     
+> 0.0061
+                                                Root MSE          =     
+> .66335
+
+                           (Std. Err. adjusted for 2,687 clusters in sta
+> tenum)
+------------------------------------------------------------------------
+> ------
+             |               Robust
+      Dyprop |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Int
+> erval]
+-------------+----------------------------------------------------------
+> ------
+        irca |  -1.233956   .5828363    -2.12   0.034    -2.376809   -.0
+> 911025
+     Lla14pc |  -2.126346   1.205054    -1.76   0.078    -4.489273    .2
+> 365812
+    LATWIXt2 |   1.418088   1.546383     0.92   0.359    -1.614134     4
+> .45031
+    MATWIXt2 |  -1.187412    1.30354    -0.91   0.362    -3.743454    1.
+> 368631
+ _Iyear_1982 |  -.1601606   .0216538    -7.40   0.000    -.2026205   -.1
+> 177007
+ _Iyear_1983 |  -.0858862   .0191712    -4.48   0.000    -.1234781   -.0
+> 482944
+ _Iyear_1984 |  -.1261156   .0187959    -6.71   0.000    -.1629715   -.0
+> 892596
+ _Iyear_1985 |  -.0240159   .0183587    -1.31   0.191    -.0600145    .0
+> 119827
+ _Iyear_1986 |  -.1200217   .0183471    -6.54   0.000    -.1559976   -.0
+> 840458
+ _Iyear_1987 |  -.0702355   .0176512    -3.98   0.000    -.1048469   -.0
+> 356242
+ _Iyear_1988 |   -.078919   .0185373    -4.26   0.000    -.1152678   -.0
+> 425701
+ _Iyear_1989 |  -.0264036   .0183697    -1.44   0.151    -.0624238    .0
+> 096167
+ _Iyear_1990 |  -.0261381   .0203423    -1.28   0.199    -.0660263    .0
+> 137502
+ _Iyear_1991 |  -.0598604   .0190861    -3.14   0.002    -.0972853   -.0
+> 224355
+ _Iyear_1992 |  -.1045955   .0199137    -5.25   0.000    -.1436432   -.0
+> 655477
+ _Iyear_1993 |  -.1353499   .0207048    -6.54   0.000    -.1759489   -.0
+> 947509
+ _Iyear_1994 |  -.0639628   .0203305    -3.15   0.002    -.1038278   -.0
+> 240978
+ _Iyear_1995 |  -.0463033   .0210261    -2.20   0.028    -.0875322   -.0
+> 050743
+ _Iyear_1996 |  -.0808098   .0210092    -3.85   0.000    -.1220057   -.0
+> 396138
+ _Iyear_1997 |  -.1163836   .0201135    -5.79   0.000     -.155823   -.0
+> 769442
+ _Iyear_1998 |  -.1259847    .021795    -5.78   0.000    -.1687214   -.0
+> 832481
+ _Iyear_1999 |  -.2053244   .0237689    -8.64   0.000    -.2519315   -.1
+> 587173
+       _cons |   .0910175   .0127599     7.13   0.000     .0659973    .1
+> 160377
+------------------------------------------------------------------------
+> ------
+
+. * All Outcome ;
+. lassoShooting Dyall `AllAll' , controls(`tdums') lasiter(100) verbose(
+> 0) fdisplay(0) ;
+
+. local yaSel `r(selected)' ;
+
+. di "`yaSel'" ;
+
+
+. * All IRCA ;
+. lassoShooting irca `AllAll' , controls(`tdums') lasiter(100) verbose(0
+> ) fdisplay(0) ;
+
+. local xaSel `r(selected)' ;
+
+. di "`xaSel'" ;
+Lla14pc LATWIXt2 MATWIXt2
+
+. * Get union of selected instruments ;
+. local aDS : list yaSel | xaSel ;
+
+. * Property equation with selected controls ;
+. reg Dyall irca `aDS' `tdums' , cluster(statenum) ;
+
+Linear regression                               Number of obs     =     
+> 41,664
+                                                F(22, 2686)       =     
+>  14.64
+                                                Prob > F          =     
+> 0.0000
+                                                R-squared         =     
+> 0.0056
+                                                Root MSE          =     
+> .53328
+
+                           (Std. Err. adjusted for 2,687 clusters in sta
+> tenum)
+------------------------------------------------------------------------
+> ------
+             |               Robust
+       Dyall |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Int
+> erval]
+-------------+----------------------------------------------------------
+> ------
+        irca |  -1.152866   .4192266    -2.75   0.006    -1.974906   -.3
+> 308267
+     Lla14pc |  -1.894122   .9217143    -2.05   0.040    -3.701463   -.0
+> 867806
+    LATWIXt2 |   .7318699   1.144049     0.64   0.522    -1.511436    2.
+> 975175
+    MATWIXt2 |  -.5492623   .9517416    -0.58   0.564    -2.415483    1.
+> 316958
+ _Iyear_1982 |   -.111205   .0186281    -5.97   0.000    -.1477319   -.0
+> 746782
+ _Iyear_1983 |  -.0763336     .01643    -4.65   0.000    -.1085503   -.0
+> 441168
+ _Iyear_1984 |  -.1220641   .0157162    -7.77   0.000    -.1528811   -.0
+> 912471
+ _Iyear_1985 |  -.0737745   .0149733    -4.93   0.000    -.1031349   -.0
+> 444142
+ _Iyear_1986 |  -.1118589   .0153271    -7.30   0.000     -.141913   -.0
+> 818048
+ _Iyear_1987 |  -.0806536   .0153346    -5.26   0.000    -.1107225   -.0
+> 505848
+ _Iyear_1988 |  -.0637607   .0155865    -4.09   0.000    -.0943235   -.0
+> 331979
+ _Iyear_1989 |  -.0405496   .0157382    -2.58   0.010    -.0714098   -.0
+> 096893
+ _Iyear_1990 |   .0058841   .0169507     0.35   0.729    -.0273537    .0
+> 391219
+ _Iyear_1991 |  -.0891254   .0161274    -5.53   0.000    -.1207487    -.
+> 057502
+ _Iyear_1992 |  -.0983681   .0167514    -5.87   0.000     -.131215   -.0
+> 655212
+ _Iyear_1993 |  -.1255899   .0175556    -7.15   0.000    -.1600138    -.
+> 091166
+ _Iyear_1994 |  -.0761864   .0171742    -4.44   0.000    -.1098625   -.0
+> 425104
+ _Iyear_1995 |  -.0646125   .0178219    -3.63   0.000    -.0995586   -.0
+> 296664
+ _Iyear_1996 |   -.053338   .0181021    -2.95   0.003    -.0888335   -.0
+> 178425
+ _Iyear_1997 |  -.0919792   .0166216    -5.53   0.000    -.1245717   -.0
+> 593868
+ _Iyear_1998 |  -.0646958   .0180277    -3.59   0.000    -.1000455   -.0
+> 293462
+ _Iyear_1999 |  -.1578909   .0201875    -7.82   0.000    -.1974755   -.1
+> 183064
+       _cons |   .0959759   .0114832     8.36   0.000     .0734591    .1
+> 184927
+------------------------------------------------------------------------
+> ------
+
+. log close ;
+      name:  <unnamed>
+       log:  /Users/Qiyuan/Desktop/ERP/data/erp_result_new.txt
+  log type:  text
+ closed on:   7 Jul 2020, 17:44:46
+------------------------------------------------------------------------
